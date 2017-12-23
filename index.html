@@ -18,18 +18,65 @@
 	var canvas = document.getElementById("gameCanvas");
 	var ctx = canvas.getContext("2d");
 
+	// world building
+	var gravity = 0; // 0.5
+	var friction = 0.2;
+	var meltRate = 0.05;
+
 	// the floor is lava
 	var lavaMainColor = "#FF8000";
 	var lavaSurfaceColor = "#FFC000";
-	var lavaMainHeight = 150;
-	var lavaSurfaceHeight = 10;
+	var lavaBottomHeight = 125;
+	var lavaMainHeight = 200;
+	var lavaSurfaceHeight = 3;
 
 	function updateCanvas() {
 		canvas.width = $(window).width();
 		canvas.height = $(window).height();
 	}
 
-	function drawLava() {
+	// used to define player object
+	function Player(radius, speed, x, y, dx, dy) {
+		this.radius = radius;
+		this.speed = speed;
+		this.x = x;
+		this.y = y;
+		this.dx = dx;
+		this.dy = dy;
+		this.isAlive = true;
+		this.onGround = false;
+	}
+
+	// used to define rock objects
+	function Rock(x, y, width, height) {
+		this.x = x;
+		this.y = y;
+		this.a = 0; // angle relative to horizontal
+		this.da = 0; // angular velocity
+		this.width = width;
+		this.height = height;
+	}
+
+	var rocks = new Array();
+	function addRock(x, y, width, height) {
+		rocks.push(new Rock(x, y, width, height));
+	}
+
+	function drawScore() {
+		ctx.font = "24px Arial";
+		ctx.fillStyle = "#646464";
+		ctx.fillText("Score: " + 0, 50, 70);
+	}
+
+	function drawPlayer() {
+		ctx.beginPath();
+		ctx.arc(player.x, player.y, player.radius, 0, Math.PI*2);
+		ctx.fillStyle = "#000000";
+		ctx.fill();
+		ctx.closePath();
+	}
+
+	function drawBackground() {
 		ctx.beginPath();
 		ctx.rect(
 			0,
@@ -56,12 +103,225 @@
 		ctx.closePath();
 	}
 
+	function drawForeground() {
+		ctx.beginPath();
+		ctx.rect(
+			0,
+			canvas.height - lavaBottomHeight,
+			canvas.width,
+			lavaMainHeight
+		);
+		ctx.fillStyle = lavaMainColor;
+		ctx.fill();
+		ctx.closePath();
+	}
+
+	function calculateVertX(ox, vx, vy, angle) {
+		return ox + vx * Math.cos(angle) - vy * Math.sin(angle);
+	}
+
+	function calculateVertY(oy, vx, vy, angle) {
+		return oy + vx * Math.sin(angle) + vy * Math.cos(angle);
+	}
+
+	function drawRocks() {
+		for(var i = 0; i < rocks.length; i++) {
+			// front face
+			ctx.beginPath();
+			ctx.moveTo(
+				calculateVertX(
+					rocks[i].x,
+					0.5 * rocks[i].width,
+					0.5 * rocks[i].height,
+					rocks[i].a
+				),
+				calculateVertY(
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					0.5 * rocks[i].width,
+					0.5 * rocks[i].height,
+					rocks[i].a
+				)
+			);
+			ctx.lineTo(
+				calculateVertX(
+					rocks[i].x,
+					0.5 * rocks[i].width,
+					-0.5 * rocks[i].height + 10,
+					rocks[i].a
+				),
+				calculateVertY(
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					0.5 * rocks[i].width,
+					-0.5 * rocks[i].height + 10,
+					rocks[i].a
+				)
+			);
+			ctx.lineTo(
+				calculateVertX(
+					rocks[i].x,
+					-0.5 * rocks[i].width,
+					-0.5 * rocks[i].height + 10,
+					rocks[i].a
+				),
+				calculateVertY(
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					-0.5 * rocks[i].width,
+					-0.5 * rocks[i].height + 10,
+					rocks[i].a
+				)
+			);
+			ctx.lineTo(
+				calculateVertX(
+					rocks[i].x,
+					-0.5 * rocks[i].width,
+					0.5 * rocks[i].height,
+					rocks[i].a
+				),
+				calculateVertY(
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					-0.5 * rocks[i].width,
+					0.5 * rocks[i].height,
+					rocks[i].a
+				)
+			);
+			ctx.strokeStyle = "#646464";
+			ctx.stroke();
+			ctx.fillStyle = "#646464";
+			ctx.fill();
+			ctx.closePath();
+			// top face
+			ctx.beginPath();
+			ctx.moveTo(
+				calculateVertX(
+					rocks[i].x,
+					0.5 * rocks[i].width,
+					-0.5 * rocks[i].height + 10,
+					rocks[i].a
+				),
+				calculateVertY(
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					0.5 * rocks[i].width,
+					-0.5 * rocks[i].height + 10,
+					rocks[i].a
+				)
+			);
+			ctx.lineTo(
+				calculateVertX(
+					rocks[i].x,
+					0.5 * rocks[i].width - 20,
+					-0.5 * rocks[i].height - 10,
+					rocks[i].a
+				),
+				calculateVertY(
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					0.5 * rocks[i].width - 20,
+					-0.5 * rocks[i].height - 10,
+					rocks[i].a
+				)
+			);
+			ctx.lineTo(
+				calculateVertX(
+					rocks[i].x,
+					-0.5 * rocks[i].width + 20,
+					-0.5 * rocks[i].height - 10,
+					rocks[i].a
+				),
+				calculateVertY(
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					-0.5 * rocks[i].width + 20,
+					-0.5 * rocks[i].height - 10,
+					rocks[i].a
+				)
+			);
+			ctx.lineTo(
+				calculateVertX(
+					rocks[i].x,
+					-0.5 * rocks[i].width,
+					-0.5 * rocks[i].height + 10,
+					rocks[i].a
+				),
+				calculateVertY(
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					-0.5 * rocks[i].width,
+					-0.5 * rocks[i].height + 10,
+					rocks[i].a
+				)
+			);
+			ctx.strokeStyle = "#7D7D7D";
+			ctx.stroke();
+			ctx.fillStyle = "#7D7D7D";
+			ctx.fill();
+			ctx.closePath();
+		}
+	}
+
+	function simulatePhysics() {
+		if(left - right > 0) {
+			if(player.dx < player.speed) {
+				player.dx += player.speed/10;
+			}
+		} else if (left - right < 0) {
+			if(player.dx > (-1) * player.speed) {
+				player.dx += (-1) * player.speed/10;
+			}
+		} else {
+			player.dx += (-1) * player.dx * friction;
+		}
+		player.x += player.dx;
+		player.y += player.dy;
+		player.dy += gravity;
+		for(var i = 0; i < rocks.length; i++) {
+			// TODO - make player collide with rock surface
+			
+			// rotate rocks
+			rocks[i].a += rocks[i].da;
+			rocks[i].da = (-0.0005) * rocks[i].a + 0.975 * rocks[i].da;
+			if(player.isAlive) { // TODO - check if player is on rock
+				rocks[i].da += (player.x - rocks[i].x)/2000000;
+				if(rocks[i].height > 10) {
+					rocks[i].height += (-1) * meltRate;
+					rocks[i].y += meltRate/2;
+				}
+			}
+		}
+	}
+
+	var left = 0;
+	var right = 0;
+	window.onkeyup = function(e) {
+		var unicode = e.keyCode ? e.keyCode : e.charCode;
+    	if(unicode == 37 || unicode == 65) {
+			right = 0;
+		}
+		if(unicode == 39 || unicode == 68) {
+			left = 0;
+		}
+    }
+	window.onkeydown = function(e) {
+		var unicode = e.keyCode ? e.keyCode : e.charCode;
+    	if(unicode == 37 || unicode == 65) {
+			right = 1;
+		}
+		if(unicode == 39 || unicode == 68) {
+			left = 1;
+		}
+    }
+
     updateCanvas();
+    var player = new Player(10, 10, canvas.width/2, canvas.height/2, 0, 0);
+    addRock(0.5 * canvas.width, 45, canvas.width - 200, 125);
     
 	function draw() {
 		updateCanvas();
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		drawLava();
+		// update positions and values
+		simulatePhysics();
+		// render objects
+		drawBackground(); // lava
+		drawRocks();
+		drawPlayer();
+		drawForeground(); // lava
+	    drawScore();
 	    requestAnimationFrame(draw);
 	}
 	draw();
