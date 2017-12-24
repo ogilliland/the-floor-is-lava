@@ -83,29 +83,32 @@
 	function draw() {
 		updateCanvas();
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		// update positions and values
-		simulatePhysics();
-		camera.follow(player);
-		// render objects
-		drawBackground(camera); // lava
-		drawRocks(camera);
-		if(player.isAlive) {
-			drawPlayer(camera, player);
-		}
-		drawForeground(camera); // lava
 		if(newGame) {
 			drawSplashScreen();
 			if(player.control.jump > 0) {
 				newGame = false;
 				init();
 			}
-		} else if(!player.isAlive) {
-			drawGameOver();
-			if(player.control.jump > 0) {
-				init();
-			}
 		} else {
-			drawScore();
+			// update positions and values
+			if(player.isAlive) {
+				simulatePhysics();
+				camera.follow(player);
+			}
+			// render objects
+			drawBackground(camera); // lava
+			drawRocks(camera);
+			if(player.isAlive) {
+				drawScore();
+				drawPlayer(camera, player);
+			}
+			drawForeground(camera); // lava
+			if(!player.isAlive) {
+				drawGameOver();
+				if(player.control.jump > 0) {
+					init();
+				}
+			}
 		}
 		requestAnimationFrame(draw);
 	}

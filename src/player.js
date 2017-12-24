@@ -23,18 +23,39 @@ function Camera(width, height) {
 	this.y = 0;
 	this.width = width;
 	this.height = height;
-	this.parallaxX = 1;
+	this.parallaxX = 2;
 	this.parallaxY = 4;
 	this.follow = function(target) {
-		this.x = (target.x - canvas.width/2)/this.parallaxX;
-		this.y = (target.y - canvas.height/2)/this.parallaxY;
+		this.x = (target.x - canvas.width + this.width/2)/this.parallaxX;
+		if(this.x < (target.x - 9 * canvas.width/10)) {
+			this.x = (target.x - 9 * canvas.width/10);
+		} else if(this.x > target.x - canvas.width/10) {
+			this.x = target.x - canvas.width/10;
+		}
+		if(canvas.height > this.height) {
+			this.y = (target.y - canvas.height/2)/this.parallaxY;
+		} else {
+			this.y = 0;
+		}
 	}
 }
 
 function drawPlayer(camera, player) {
-	ctx.beginPath();
-    ctx.arc(player.x - camera.x, player.y - camera.y, player.radius, 0, Math.PI*2);
-    ctx.fillStyle = "#000000";
-    ctx.fill();
-    ctx.closePath();
+	if(player.y - camera.y > 0) {
+		ctx.beginPath();
+	    ctx.arc(player.x - camera.x, player.y - camera.y, player.radius, 0, Math.PI*2);
+	    ctx.fillStyle = "#000000";
+	    ctx.fill();
+	    ctx.closePath();
+	} else {
+		ctx.beginPath();
+		ctx.moveTo(player.x - camera.x, 10);
+		ctx.lineTo(player.x - camera.x - 5, 15);
+		ctx.lineTo(player.x - camera.x + 5, 15);
+		ctx.strokeStyle = "#000000";
+		ctx.stroke();
+		ctx.fillStyle = "#000000";
+		ctx.fill();
+		ctx.closePath();
+	}
 }

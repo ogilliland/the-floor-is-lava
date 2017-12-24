@@ -2,6 +2,7 @@
 var gravity = 0.5;
 var friction = 0.2;
 var meltRate = 0.2;
+var multiplier = 1;
 
 // the floor is lava
 var lavaBottomColor = "rgba(255, 128, 0, 0.875)";
