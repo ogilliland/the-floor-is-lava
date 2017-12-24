@@ -17,6 +17,8 @@
 <script>
 	var canvas = document.getElementById("gameCanvas");
 	var ctx = canvas.getContext("2d");
+	var width = 800;
+	var height = 600;
 
 	// world building
 	var gravity = 0.5;
@@ -24,20 +26,31 @@
 	var meltRate = 0.2;
 	var score = 0;
 	var player = new Player();
+	var camera = new Camera(width, height);
 	var newGame = true;
 	var titleColor = "rgba(255, 255, 255, 1)";
 	var textColor = "rgba(200, 200, 200, 1)";
 
 	// the floor is lava
-	var lavaMainColor = "#FF8000";
-	var lavaSurfaceColor = "#FFC000";
+	var lavaBottomColor = "rgba(255, 128, 0, 0.875)";
+	var lavaMainColor = "rgba(255, 128, 0, 1)";
+	var lavaSurfaceColor = "rgba(255, 192, 0, 1)";
 	var lavaBottomHeight = 125;
 	var lavaMainHeight = 200;
 	var lavaSurfaceHeight = 3;
+	var rockMainColor = "rgba(100, 100, 100, 1)";
+	var rockHighlightColor = "rgba(125, 125, 125, 1)";
 
 	function updateCanvas() {
 		canvas.width = $(window).width();
 		canvas.height = $(window).height();
+	}
+
+	function Camera(width, height) {
+		this.x = 0;
+		this.y = 0;
+		this.width = width;
+		this.height = height;
 	}
 
 	// used to define player object
@@ -141,7 +154,7 @@
 
 	function drawPlayer() {
 		ctx.beginPath();
-	    ctx.arc(player.x, player.y, player.radius, 0, Math.PI*2);
+	    ctx.arc(player.x - camera.x, player.y - camera.y, player.radius, 0, Math.PI*2);
 	    ctx.fillStyle = "#000000";
 	    ctx.fill();
 	    ctx.closePath();
@@ -151,9 +164,9 @@
 		ctx.beginPath();
 		ctx.rect(
 			0,
-			canvas.height - lavaMainHeight,
+			canvas.height - lavaMainHeight - camera.y,
 			canvas.width,
-			lavaMainHeight
+			canvas.height
 		);
 		ctx.strokeStyle = lavaMainColor;
 		ctx.stroke();
@@ -163,7 +176,7 @@
 		ctx.beginPath();
 		ctx.rect(
 			0,
-			canvas.height - lavaMainHeight - lavaSurfaceHeight,
+			canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y,
 			canvas.width,
 			lavaSurfaceHeight
 		);
@@ -178,11 +191,11 @@
 		ctx.beginPath();
 		ctx.rect(
 			0,
-			canvas.height - lavaBottomHeight,
+			canvas.height - lavaBottomHeight - camera.y,
 			canvas.width,
-			lavaMainHeight
+			canvas.height
 		);
-		ctx.fillStyle = lavaMainColor;
+		ctx.fillStyle = lavaBottomColor;
 		ctx.fill();
 		ctx.closePath();
 	}
@@ -201,13 +214,13 @@
 			ctx.beginPath();
 			ctx.moveTo(
 				calculateVertX(
-					rocks[i].x,
+					rocks[i].x - camera.x,
 					0.5 * rocks[i].width,
 					0.5 * rocks[i].height,
 					rocks[i].a
 				),
 				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
 					0.5 * rocks[i].width,
 					0.5 * rocks[i].height,
 					rocks[i].a
@@ -215,13 +228,13 @@
 			);
 			ctx.lineTo(
 				calculateVertX(
-					rocks[i].x,
+					rocks[i].x - camera.x,
 					0.5 * rocks[i].width,
 					-0.5 * rocks[i].height,
 					rocks[i].a
 				),
 				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
 					0.5 * rocks[i].width,
 					-0.5 * rocks[i].height,
 					rocks[i].a
@@ -229,13 +242,13 @@
 			);
 			ctx.lineTo(
 				calculateVertX(
-					rocks[i].x,
+					rocks[i].x - camera.x,
 					-0.5 * rocks[i].width,
 					-0.5 * rocks[i].height,
 					rocks[i].a
 				),
 				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
 					-0.5 * rocks[i].width,
 					-0.5 * rocks[i].height,
 					rocks[i].a
@@ -243,34 +256,34 @@
 			);
 			ctx.lineTo(
 				calculateVertX(
-					rocks[i].x,
+					rocks[i].x - camera.x,
 					-0.5 * rocks[i].width,
 					0.5 * rocks[i].height,
 					rocks[i].a
 				),
 				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
 					-0.5 * rocks[i].width,
 					0.5 * rocks[i].height,
 					rocks[i].a
 				)
 			);
-			ctx.strokeStyle = "#646464";
+			ctx.strokeStyle = rockMainColor;
 			ctx.stroke();
-			ctx.fillStyle = "#646464";
+			ctx.fillStyle = rockMainColor;
 			ctx.fill();
 			ctx.closePath();
 			// top face
 			ctx.beginPath();
 			ctx.moveTo(
 				calculateVertX(
-					rocks[i].x,
+					rocks[i].x - camera.x,
 					0.5 * rocks[i].width,
 					-0.5 * rocks[i].height,
 					rocks[i].a
 				),
 				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
 					0.5 * rocks[i].width,
 					-0.5 * rocks[i].height,
 					rocks[i].a
@@ -278,13 +291,13 @@
 			);
 			ctx.lineTo(
 				calculateVertX(
-					rocks[i].x,
+					rocks[i].x - camera.x,
 					0.5 * rocks[i].width - 20,
 					-0.5 * rocks[i].height - 20,
 					rocks[i].a
 				),
 				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
 					0.5 * rocks[i].width - 20,
 					-0.5 * rocks[i].height - 20,
 					rocks[i].a
@@ -292,13 +305,13 @@
 			);
 			ctx.lineTo(
 				calculateVertX(
-					rocks[i].x,
+					rocks[i].x - camera.x,
 					-0.5 * rocks[i].width + 20,
 					-0.5 * rocks[i].height - 20,
 					rocks[i].a
 				),
 				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
 					-0.5 * rocks[i].width + 20,
 					-0.5 * rocks[i].height - 20,
 					rocks[i].a
@@ -306,21 +319,21 @@
 			);
 			ctx.lineTo(
 				calculateVertX(
-					rocks[i].x,
+					rocks[i].x - camera.x,
 					-0.5 * rocks[i].width,
 					-0.5 * rocks[i].height,
 					rocks[i].a
 				),
 				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
 					-0.5 * rocks[i].width,
 					-0.5 * rocks[i].height,
 					rocks[i].a
 				)
 			);
-			ctx.strokeStyle = "#7D7D7D";
+			ctx.strokeStyle = rockHighlightColor;
 			ctx.stroke();
-			ctx.fillStyle = "#7D7D7D";
+			ctx.fillStyle = rockHighlightColor;
 			ctx.fill();
 			ctx.closePath();
 		}
@@ -421,7 +434,7 @@
 		if(unicode == 87 || unicode == 38 || unicode == 32 || unicode == 13) {
 			jump = 0;
 		}
-    }
+	}
 	window.onkeydown = function(e) {
 		var unicode = e.keyCode ? e.keyCode : e.charCode;
     	if(unicode == 37 || unicode == 65) {
@@ -433,30 +446,35 @@
 		if(unicode == 87 || unicode == 38 || unicode == 32 || unicode == 13) {
 			jump = 1;
 		}
-    }
+	}
 
-    function init() {
-    	score = 0;
-	    player.radius = 10;
-	    player.speed = 10;
-	    player.x = canvas.width/2;
-	    player.y = canvas.height/2;
-	    player.dx = 0;
-	    player.dy = 0;
-	    player.onGround = false;
-	    player.isAlive = true;
-	    clearRocks();
-	    addRock(0.5 * canvas.width, 40, canvas.width - 200, 125);
+	function init() {
+		score = 0;
+		player.radius = 10;
+		player.speed = 10;
+		player.x = width/2;
+		player.y = height - lavaMainHeight - lavaBottomHeight - 100;
+		player.dx = 0;
+		player.dy = 0;
+		player.onGround = false;
+		player.isAlive = true;
+		clearRocks();
+		addRock(width/2, 40, width - 100, 125);
+	}
+
+	function updateCamera() {
+		camera.x = player.x - canvas.width/2;
+		camera.y = (player.y - canvas.height/2)/4; // 0
 	}
     
-    updateCanvas();
-    addRock(0.5 * canvas.width, 40, canvas.width - 200, 125);
+	updateCanvas();
 
 	function draw() {
 		updateCanvas();
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		// update positions and values
 		simulatePhysics();
+		updateCamera();
 		// render objects
 		drawBackground(); // lava
 		drawRocks();
@@ -464,15 +482,15 @@
 			drawPlayer();
 		}
 		drawForeground(); // lava
-	    	if(newGame) {
-	 		drawSplashScreen();
-	 		if(jump > 0) {
-	 			newGame = false;
-	 			init();
+		if(newGame) {
+			drawSplashScreen();
+			if(jump > 0) {
+				newGame = false;
+				init();
 			}
 		} else if(!player.isAlive) {
-	    		drawGameOver();
-	    		if(jump > 0) {
+			drawGameOver();
+			if(jump > 0) {
 				init();
 			}
 		} else {
