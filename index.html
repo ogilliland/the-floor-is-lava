@@ -14,438 +14,28 @@
 <canvas id="gameCanvas" width="800" height="600"></canvas>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="src/gui.js"></script>
+<script src="src/world.js"></script>
+<script src="src/player.js"></script>
+<script src="src/rocks.js"></script>
+<script src="src/physics.js"></script>
+
 <script>
 	var canvas = document.getElementById("gameCanvas");
 	var ctx = canvas.getContext("2d");
 	var width = 800;
 	var height = 600;
 
-	// world building
-	var gravity = 0.5;
-	var friction = 0.2;
-	var meltRate = 0.2;
+	// setup
 	var score = 0;
 	var player = new Player();
 	var camera = new Camera(width, height);
 	var newGame = true;
-	var titleColor = "rgba(255, 255, 255, 1)";
-	var textColor = "rgba(200, 200, 200, 1)";
-
-	// the floor is lava
-	var lavaBottomColor = "rgba(255, 128, 0, 0.875)";
-	var lavaMainColor = "rgba(255, 128, 0, 1)";
-	var lavaSurfaceColor = "rgba(255, 192, 0, 1)";
-	var lavaBottomHeight = 125;
-	var lavaMainHeight = 200;
-	var lavaSurfaceHeight = 3;
-	var rockMainColor = "rgba(100, 100, 100, 1)";
-	var rockHighlightColor = "rgba(125, 125, 125, 1)";
 
 	function updateCanvas() {
 		canvas.width = $(window).width();
 		canvas.height = $(window).height();
-	}
-
-	function Camera(width, height) {
-		this.x = 0;
-		this.y = 0;
-		this.width = width;
-		this.height = height;
-	}
-
-	// used to define player object
-	function Player(radius, speed, x, y, dx, dy) {
-		this.radius = radius;
-		this.speed = speed;
-		this.x = x;
-		this.y = y;
-		this.dx = dx;
-		this.dy = dy;
-		this.isAlive = true;
-		this.onGround = false;
-	}
-
-	// used to define rock objects
-	function Rock(x, y, width, height) {
-		this.x = x;
-		this.y = y;
-		this.a = 0; // angle relative to horizontal
-		this.da = 0; // angular velocity
-		this.width = width;
-		this.height = height;
-		this.targetHeight = height;
-		this.targetY = y;
-	}
-
-	var rocks = new Array();
-	function addRock(x, y, width, height) {
-		rocks.push(new Rock(x, y, width, height));
-	}
-
-	function clearRocks() {
-		rocks.length = 0;
-	}
-
-	function meltRock(id, rate) {
-		if(rocks[id].targetHeight - rate > 0) {
-			rocks[id].targetHeight += (-1) * rate;
-			rocks[id].targetY += rate/2;
-		} else {
-			rocks[id].height = 0;
-			rocks[id].targetY = 200;
-		}
-	}
-
-	function drawScore() {
-		ctx.font = "100 24px sans-serif";
-		ctx.fillStyle = textColor;
-    	var textWidth = ctx.measureText(score).width;
-		ctx.fillText(score, (canvas.width/2) - (textWidth/2), 100);
-	}
-
-	function drawSplashScreen() {
-		ctx.beginPath();
-		ctx.rect(
-			0,
-			0,
-			canvas.width,
-			canvas.height
-		);
-		ctx.fillStyle = "rgba(0, 0, 0, 1)";
-		ctx.fill();
-		ctx.closePath();
-		// text
-		ctx.font = "100 50px sans-serif";
-		ctx.fillStyle = titleColor;
-		var title = "THE FLOOR IS LAVA!";
-    	var titleWidth = ctx.measureText(title).width;
-		ctx.fillText(title, (canvas.width/2) - (titleWidth/2), (canvas.height/2) - 25);
-		ctx.font = "100 24px sans-serif";
-		var text = "Press jump to begin...";
-		var textWidth = ctx.measureText(text).width;
-		ctx.fillStyle = titleColor;
-		ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 100);
-
-	}
-
-	function drawGameOver() {
-		ctx.beginPath();
-		ctx.rect(
-			0,
-			0,
-			canvas.width,
-			canvas.height
-		);
-		ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
-		ctx.fill();
-		ctx.closePath();
-		// text
-		ctx.font = "100 50px sans-serif";
-		ctx.fillStyle = titleColor;
-		var title = "YOU SCORED " + score + " POINTS";
-    	var titleWidth = ctx.measureText(title).width;
-		ctx.fillText(title, (canvas.width/2) - (titleWidth/2), (canvas.height/2) - 25);
-		ctx.font = "100 24px sans-serif";
-		var text = "Press jump to try again...";
-		var textWidth = ctx.measureText(text).width;
-		ctx.fillStyle = titleColor;
-		ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 100);
-	}
-
-	function drawPlayer() {
-		ctx.beginPath();
-	    ctx.arc(player.x - camera.x, player.y - camera.y, player.radius, 0, Math.PI*2);
-	    ctx.fillStyle = "#000000";
-	    ctx.fill();
-	    ctx.closePath();
-	}
-
-	function drawBackground() {
-		ctx.beginPath();
-		ctx.rect(
-			0,
-			canvas.height - lavaMainHeight - camera.y,
-			canvas.width,
-			canvas.height
-		);
-		ctx.strokeStyle = lavaMainColor;
-		ctx.stroke();
-		ctx.fillStyle = lavaMainColor;
-		ctx.fill();
-		ctx.closePath();
-		ctx.beginPath();
-		ctx.rect(
-			0,
-			canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y,
-			canvas.width,
-			lavaSurfaceHeight
-		);
-		ctx.strokeStyle = lavaSurfaceColor;
-		ctx.stroke();
-		ctx.fillStyle = lavaSurfaceColor;
-		ctx.fill();
-		ctx.closePath();
-	}
-
-	function drawForeground() {
-		ctx.beginPath();
-		ctx.rect(
-			0,
-			canvas.height - lavaBottomHeight - camera.y,
-			canvas.width,
-			canvas.height
-		);
-		ctx.fillStyle = lavaBottomColor;
-		ctx.fill();
-		ctx.closePath();
-	}
-
-	function calculateVertX(ox, vx, vy, angle) {
-		return ox + vx * Math.cos(angle) - vy * Math.sin(angle);
-	}
-
-	function calculateVertY(oy, vx, vy, angle) {
-		return oy + vx * Math.sin(angle) + vy * Math.cos(angle);
-	}
-
-	function drawRocks() {
-		for(var i = 0; i < rocks.length; i++) {
-			// front face
-			ctx.beginPath();
-			ctx.moveTo(
-				calculateVertX(
-					rocks[i].x - camera.x,
-					0.5 * rocks[i].width,
-					0.5 * rocks[i].height,
-					rocks[i].a
-				),
-				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
-					0.5 * rocks[i].width,
-					0.5 * rocks[i].height,
-					rocks[i].a
-				)
-			);
-			ctx.lineTo(
-				calculateVertX(
-					rocks[i].x - camera.x,
-					0.5 * rocks[i].width,
-					-0.5 * rocks[i].height,
-					rocks[i].a
-				),
-				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
-					0.5 * rocks[i].width,
-					-0.5 * rocks[i].height,
-					rocks[i].a
-				)
-			);
-			ctx.lineTo(
-				calculateVertX(
-					rocks[i].x - camera.x,
-					-0.5 * rocks[i].width,
-					-0.5 * rocks[i].height,
-					rocks[i].a
-				),
-				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
-					-0.5 * rocks[i].width,
-					-0.5 * rocks[i].height,
-					rocks[i].a
-				)
-			);
-			ctx.lineTo(
-				calculateVertX(
-					rocks[i].x - camera.x,
-					-0.5 * rocks[i].width,
-					0.5 * rocks[i].height,
-					rocks[i].a
-				),
-				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
-					-0.5 * rocks[i].width,
-					0.5 * rocks[i].height,
-					rocks[i].a
-				)
-			);
-			ctx.strokeStyle = rockMainColor;
-			ctx.stroke();
-			ctx.fillStyle = rockMainColor;
-			ctx.fill();
-			ctx.closePath();
-			// top face
-			ctx.beginPath();
-			ctx.moveTo(
-				calculateVertX(
-					rocks[i].x - camera.x,
-					0.5 * rocks[i].width,
-					-0.5 * rocks[i].height,
-					rocks[i].a
-				),
-				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
-					0.5 * rocks[i].width,
-					-0.5 * rocks[i].height,
-					rocks[i].a
-				)
-			);
-			ctx.lineTo(
-				calculateVertX(
-					rocks[i].x - camera.x,
-					0.5 * rocks[i].width - 20,
-					-0.5 * rocks[i].height - 20,
-					rocks[i].a
-				),
-				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
-					0.5 * rocks[i].width - 20,
-					-0.5 * rocks[i].height - 20,
-					rocks[i].a
-				)
-			);
-			ctx.lineTo(
-				calculateVertX(
-					rocks[i].x - camera.x,
-					-0.5 * rocks[i].width + 20,
-					-0.5 * rocks[i].height - 20,
-					rocks[i].a
-				),
-				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
-					-0.5 * rocks[i].width + 20,
-					-0.5 * rocks[i].height - 20,
-					rocks[i].a
-				)
-			);
-			ctx.lineTo(
-				calculateVertX(
-					rocks[i].x - camera.x,
-					-0.5 * rocks[i].width,
-					-0.5 * rocks[i].height,
-					rocks[i].a
-				),
-				calculateVertY(
-					rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight - camera.y),
-					-0.5 * rocks[i].width,
-					-0.5 * rocks[i].height,
-					rocks[i].a
-				)
-			);
-			ctx.strokeStyle = rockHighlightColor;
-			ctx.stroke();
-			ctx.fillStyle = rockHighlightColor;
-			ctx.fill();
-			ctx.closePath();
-		}
-	}
-
-	function simulatePhysics() {
-		if(player.isAlive) {
-			if(jump > 0 && player.onGround) {
-				player.dy = -20;
-				player.onGround = false;
-			}
-			if(left - right > 0) {
-				if(player.dx < player.speed) {
-					player.dx += player.speed/10;
-				}
-			} else if (left - right < 0) {
-				if(player.dx > (-1) * player.speed) {
-					player.dx += (-1) * player.speed/10;
-				}
-			} else {
-				player.dx += (-1) * player.dx * friction;
-			}
-			player.x += player.dx;
-			player.y += player.dy;
-			player.dy += gravity;
-			for(var i = 0; i < rocks.length; i++) {
-				// rotate rocks
-				rocks[i].a += rocks[i].da;
-				rocks[i].da = (-0.0005) * rocks[i].a + 0.975 * rocks[i].da;
-				// melt rocks
-				rocks[i].height += (rocks[i].targetHeight - rocks[i].height)/10;
-				rocks[i].y += (rocks[i].targetY - rocks[i].y)/10;
-				// make player collide with rock surface
-				var leftPoint = calculateVertX(
-							rocks[i].x,
-							-0.5 * rocks[i].width,
-							-0.5 * rocks[i].height,
-							rocks[i].a
-				)
-				var rightPoint = calculateVertX(
-							rocks[i].x,
-							0.5 * rocks[i].width,
-							-0.5 * rocks[i].height,
-							rocks[i].a
-				)
-				if(player.x > leftPoint && player.x < rightPoint) {
-					var leftHeight = calculateVertY(
-								rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
-								-0.5 * rocks[i].width,
-								-0.5 * rocks[i].height,
-								rocks[i].a
-					)
-					var rightHeight = calculateVertY(
-								rocks[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
-								0.5 * rocks[i].width,
-								-0.5 * rocks[i].height,
-								rocks[i].a
-					)
-					var slope = (rightHeight - leftHeight)/(rightPoint - leftPoint);
-					var rockSurface = leftHeight + slope * (player.x - leftPoint);
-					if(player.y + 20 > rockSurface && player.y < rockSurface + 20) {
-						if(player.onGround) {
-							// player is resting on rock
-							rocks[i].da += (player.x - rocks[i].x)/1000000;
-							meltRock(i, meltRate);
-						} else {
-							// player just landed on rock
-							if(i > score) {
-								score = i;
-							}
-							rocks[i].da += 2 * player.dy * (player.x - rocks[i].x)/1000000;
-							meltRock(i, 50 * meltRate);
-							player.onGround = true;
-						}
-						player.y = rockSurface - 20;
-						player.dy = 0;
-					}
-				}
-			}
-			if(player.y > canvas.height - lavaBottomHeight) {
-				player.isAlive = false;
-				jump = 0;
-			}
-		}
-	}
-
-	var left = 0;
-	var right = 0;
-	var jump = 0;
-	window.onkeyup = function(e) {
-		var unicode = e.keyCode ? e.keyCode : e.charCode;
-    	if(unicode == 37 || unicode == 65) {
-			right = 0;
-		}
-		if(unicode == 39 || unicode == 68) {
-			left = 0;
-		}
-		if(unicode == 87 || unicode == 38 || unicode == 32 || unicode == 13) {
-			jump = 0;
-		}
-	}
-	window.onkeydown = function(e) {
-		var unicode = e.keyCode ? e.keyCode : e.charCode;
-    	if(unicode == 37 || unicode == 65) {
-			right = 1;
-		}
-		if(unicode == 39 || unicode == 68) {
-			left = 1;
-		}
-		if(unicode == 87 || unicode == 38 || unicode == 32 || unicode == 13) {
-			jump = 1;
-		}
 	}
 
 	function init() {
@@ -462,9 +52,30 @@
 		addRock(width/2, 40, width - 100, 125);
 	}
 
-	function updateCamera() {
-		camera.x = player.x - canvas.width/2;
-		camera.y = (player.y - canvas.height/2)/4; // 0
+	window.onkeyup = function(e) {
+		var unicode = e.keyCode ? e.keyCode : e.charCode;
+		if(unicode == 37 || unicode == 65) {
+			player.control.right = 0;
+		}
+		if(unicode == 39 || unicode == 68) {
+			player.control.left = 0;
+		}
+		if(unicode == 87 || unicode == 38 || unicode == 32 || unicode == 13) {
+			player.control.jump = 0;
+		}
+	}
+
+	window.onkeydown = function(e) {
+		var unicode = e.keyCode ? e.keyCode : e.charCode;
+		if(unicode == 37 || unicode == 65) {
+			player.control.right = 1;
+		}
+		if(unicode == 39 || unicode == 68) {
+			player.control.left = 1;
+		}
+		if(unicode == 87 || unicode == 38 || unicode == 32 || unicode == 13) {
+			player.control.jump = 1;
+		}
 	}
     
 	updateCanvas();
@@ -474,23 +85,23 @@
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		// update positions and values
 		simulatePhysics();
-		updateCamera();
+		camera.follow(player);
 		// render objects
-		drawBackground(); // lava
-		drawRocks();
+		drawBackground(camera); // lava
+		drawRocks(camera);
 		if(player.isAlive) {
-			drawPlayer();
+			drawPlayer(camera, player);
 		}
-		drawForeground(); // lava
+		drawForeground(camera); // lava
 		if(newGame) {
 			drawSplashScreen();
-			if(jump > 0) {
+			if(player.control.jump > 0) {
 				newGame = false;
 				init();
 			}
 		} else if(!player.isAlive) {
 			drawGameOver();
-			if(jump > 0) {
+			if(player.control.jump > 0) {
 				init();
 			}
 		} else {
