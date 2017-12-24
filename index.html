@@ -23,6 +23,10 @@
 	var friction = 0.2;
 	var meltRate = 0.2;
 	var score = 0;
+	var player = new Player();
+	var newGame = true;
+	var titleColor = "rgba(255, 255, 255, 1)";
+	var textColor = "rgba(200, 200, 200, 1)";
 
 	// the floor is lava
 	var lavaMainColor = "#FF8000";
@@ -65,6 +69,10 @@
 		rocks.push(new Rock(x, y, width, height));
 	}
 
+	function clearRocks() {
+		rocks.length = 0;
+	}
+
 	function meltRock(id, rate) {
 		if(rocks[id].targetHeight - rate > 0) {
 			rocks[id].targetHeight += (-1) * rate;
@@ -76,17 +84,67 @@
 	}
 
 	function drawScore() {
-		ctx.font = "24px Arial";
-		ctx.fillStyle = "#646464";
-		ctx.fillText("Score: " + score, 50, 70);
+		ctx.font = "100 24px sans-serif";
+		ctx.fillStyle = textColor;
+    	var textWidth = ctx.measureText(score).width;
+		ctx.fillText(score, (canvas.width/2) - (textWidth/2), 100);
+	}
+
+	function drawSplashScreen() {
+		ctx.beginPath();
+		ctx.rect(
+			0,
+			0,
+			canvas.width,
+			canvas.height
+		);
+		ctx.fillStyle = "rgba(0, 0, 0, 1)";
+		ctx.fill();
+		ctx.closePath();
+		// text
+		ctx.font = "100 50px sans-serif";
+		ctx.fillStyle = titleColor;
+		var title = "THE FLOOR IS LAVA!";
+    	var titleWidth = ctx.measureText(title).width;
+		ctx.fillText(title, (canvas.width/2) - (titleWidth/2), (canvas.height/2) - 25);
+		ctx.font = "100 24px sans-serif";
+		var text = "Press jump to begin...";
+		var textWidth = ctx.measureText(text).width;
+		ctx.fillStyle = titleColor;
+		ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 100);
+
+	}
+
+	function drawGameOver() {
+		ctx.beginPath();
+		ctx.rect(
+			0,
+			0,
+			canvas.width,
+			canvas.height
+		);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
+		ctx.fill();
+		ctx.closePath();
+		// text
+		ctx.font = "100 50px sans-serif";
+		ctx.fillStyle = titleColor;
+		var title = "YOU SCORED " + score + " POINTS";
+    	var titleWidth = ctx.measureText(title).width;
+		ctx.fillText(title, (canvas.width/2) - (titleWidth/2), (canvas.height/2) - 25);
+		ctx.font = "100 24px sans-serif";
+		var text = "Press jump to try again...";
+		var textWidth = ctx.measureText(text).width;
+		ctx.fillStyle = titleColor;
+		ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 100);
 	}
 
 	function drawPlayer() {
 		ctx.beginPath();
-		ctx.arc(player.x, player.y, player.radius, 0, Math.PI*2);
-		ctx.fillStyle = "#000000";
-		ctx.fill();
-		ctx.closePath();
+	    ctx.arc(player.x, player.y, player.radius, 0, Math.PI*2);
+	    ctx.fillStyle = "#000000";
+	    ctx.fill();
+	    ctx.closePath();
 	}
 
 	function drawBackground() {
@@ -344,6 +402,7 @@
 			}
 			if(player.y > canvas.height - lavaBottomHeight) {
 				player.isAlive = false;
+				jump = 0;
 			}
 		}
 	}
@@ -359,7 +418,7 @@
 		if(unicode == 39 || unicode == 68) {
 			left = 0;
 		}
-		if(unicode == 87 || unicode == 38 || unicode == 32) {
+		if(unicode == 87 || unicode == 38 || unicode == 32 || unicode == 13) {
 			jump = 0;
 		}
     }
@@ -371,15 +430,28 @@
 		if(unicode == 39 || unicode == 68) {
 			left = 1;
 		}
-		if(unicode == 87 || unicode == 38 || unicode == 32) {
+		if(unicode == 87 || unicode == 38 || unicode == 32 || unicode == 13) {
 			jump = 1;
 		}
     }
 
-    updateCanvas();
-    var player = new Player(10, 10, canvas.width/2, canvas.height/2, 0, 0);
-    addRock(0.5 * canvas.width, 40, canvas.width - 200, 125);
+    function init() {
+    	score = 0;
+	    player.radius = 10;
+	    player.speed = 10;
+	    player.x = canvas.width/2;
+	    player.y = canvas.height/2;
+	    player.dx = 0;
+	    player.dy = 0;
+	    player.onGround = false;
+	    player.isAlive = true;
+	    clearRocks();
+	    addRock(0.5 * canvas.width, 40, canvas.width - 200, 125);
+	}
     
+    updateCanvas();
+    addRock(0.5 * canvas.width, 40, canvas.width - 200, 125);
+
 	function draw() {
 		updateCanvas();
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -388,10 +460,25 @@
 		// render objects
 		drawBackground(); // lava
 		drawRocks();
-		drawPlayer();
+		if(player.isAlive) {
+			drawPlayer();
+		}
 		drawForeground(); // lava
-	    	drawScore();
-	    	requestAnimationFrame(draw);
+	    	if(newGame) {
+	 		drawSplashScreen();
+	 		if(jump > 0) {
+	 			newGame = false;
+	 			init();
+			}
+		} else if(!player.isAlive) {
+	    		drawGameOver();
+	    		if(jump > 0) {
+				init();
+			}
+		} else {
+			drawScore();
+		}
+		requestAnimationFrame(draw);
 	}
 	draw();
 </script>
