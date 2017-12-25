@@ -62,7 +62,7 @@ function simulatePhysics() {
 			)
 			var slope = (rightHeight - leftHeight)/(rightPoint - leftPoint);
 			var rockSurface = leftHeight + slope * (player.x - leftPoint);
-			if((player.y + 20) > rockSurface && (player.y + 20 - player.dy - player.speed) < rockSurface) {
+			if((player.y + 10) > rockSurface && (player.y + 10 - player.dy - player.speed) < rockSurface) {
 				if(player.onGround) {
 					// player is resting on rock
 					rocks[i].da += (player.x - rocks[i].x)/1000000;
@@ -76,7 +76,7 @@ function simulatePhysics() {
 					rocks[i].melt(50 * meltRate * multiplier);
 					player.onGround = true;
 				}
-				player.y = rockSurface - 20;
+				player.y = rockSurface - 10;
 				player.dy = 0;
 			}
 		}
@@ -84,8 +84,8 @@ function simulatePhysics() {
 	if(activeRock == -1) {
 		player.onGround = false;
 	}
-	if(player.y > canvas.height - lavaBottomHeight) {
+	if(player.y - 10 > canvas.height - lavaBottomHeight) {
 		player.isAlive = false;
-		player.control.jump = 0;
+		player.control.return = 0;
 	}
 }

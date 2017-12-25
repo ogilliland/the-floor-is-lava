@@ -30,7 +30,7 @@ function drawSplashScreen() {
 	var titleWidth = ctx.measureText(title).width;
 	ctx.fillText(title, (canvas.width/2) - (titleWidth/2), (canvas.height/2) - 25);
 	ctx.font = "100 24px sans-serif";
-	var text = "Press jump to begin...";
+	var text = "Press enter to begin...";
 	var textWidth = ctx.measureText(text).width;
 	ctx.fillStyle = titleColor;
 	ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 100);
@@ -55,7 +55,7 @@ function drawGameOver() {
 	var titleWidth = ctx.measureText(title).width;
 	ctx.fillText(title, (canvas.width/2) - (titleWidth/2), (canvas.height/2) - 25);
 	ctx.font = "100 24px sans-serif";
-	var text = "Press jump to try again...";
+	var text = "Press enter to try again...";
 	var textWidth = ctx.measureText(text).width;
 	ctx.fillStyle = titleColor;
 	ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 100);
