@@ -18,7 +18,7 @@
 <script src="src/gui.js"></script>
 <script src="src/world.js"></script>
 <script src="src/player.js"></script>
-<script src="src/rocks.js"></script>
+<script src="src/debris.js"></script>
 <script src="src/physics.js"></script>
 
 <script>
@@ -49,8 +49,8 @@
 		player.dy = 0;
 		player.onGround = false;
 		player.isAlive = true;
-		clearRocks();
-		addRock(width/2, 40, width - 100, 125);
+		clearDebris();
+		addDebris(width/2, 40, width - 100, 125, 1);
 	}
 
 	window.onkeyup = function(e) {
@@ -104,7 +104,7 @@
 			}
 			// render objects
 			drawBackground(camera); // lava
-			drawRocks(camera);
+			drawDebris(camera);
 			if(player.isAlive) {
 				drawScore();
 				drawPlayer(camera, player);
