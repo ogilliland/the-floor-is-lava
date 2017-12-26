@@ -11,7 +11,7 @@ function make3dX(vx, depth) {
 }
 
 function make3dY(vy, depth) {
-	return vy - depth * (2 * vy / canvas.height - 1);
+	return vy - depth * (0.5 * vy / canvas.height);
 }
 
 function simulatePhysics() {

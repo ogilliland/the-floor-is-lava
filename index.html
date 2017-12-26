@@ -24,13 +24,11 @@
 <script>
 	var canvas = document.getElementById("gameCanvas");
 	var ctx = canvas.getContext("2d");
-	var width = 800;
-	var height = 600;
 
 	// setup
 	var score = 0;
 	var player = new Player();
-	var camera = new Camera(width, height);
+	var camera = new Camera(800, 600);
 	var newGame = true;
 
 	function updateCanvas() {
@@ -43,14 +41,18 @@
 		player.height = 100;
 		player.weight = 200; // used to control line thickness
 		player.speed = 10;
-		player.x = width/2;
-		player.y = height - lavaMainHeight - lavaBottomHeight - 100;
+		player.x = camera.width/2;
+		player.y = camera.height - lavaMainHeight - lavaBottomHeight - 100;
 		player.dx = 0;
 		player.dy = 0;
 		player.onGround = false;
 		player.isAlive = true;
+		camera.snapTo(player);
 		clearDebris();
-		addDebris(width/2, 40, width - 100, 125, 1);
+		clearBubbles();
+		seedBubbles(100);
+		addDebris(camera.width/2, 125/4, camera.width - 100, 125, 20);
+		addDebris(3 * camera.width/2, 125/4, camera.width - 100, 125, 20);
 	}
 
 	window.onkeyup = function(e) {

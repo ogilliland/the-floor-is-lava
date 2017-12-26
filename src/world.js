@@ -39,6 +39,12 @@ function drawBackground(camera) {
 	ctx.fillStyle = lavaSurfaceColor;
 	ctx.fill();
 	ctx.closePath();
+	if(Math.random() > 0.75) {
+		addBubble(Math.random()/2 + 0.5, 0);
+	}
+	for(var i = 0; i < bubbles1.length; i++) {
+		drawBubble(bubbles1[i]);
+	}
 }
 
 function drawForeground(camera) {
@@ -52,4 +58,94 @@ function drawForeground(camera) {
 	ctx.fillStyle = lavaBottomColor;
 	ctx.fill();
 	ctx.closePath();
+	for(var i = 0; i < bubbles2.length; i++) {
+		drawBubble(bubbles2[i]);
+	}
+}
+
+function Bubble(x, y, size, frame) {
+	this.x = x;
+	this.y = y;
+	this.size = size;
+	this.frame = frame;
+}
+
+var bubbles1 = new Array();
+var bubbles2 = new Array();
+
+function addBubble(size, frame) {
+	if(Math.random() > 0.25) {
+		bubbles2.push(new Bubble(Math.random() * (6 * canvas.width) + camera.x - 3 * canvas.width, Math.random() * 2 * lavaBottomHeight - lavaBottomHeight, size, frame));
+	} else {
+		bubbles1.push(new Bubble(Math.random() * (6 * canvas.width) + camera.x - 3 * canvas.width, Math.random() * (lavaMainHeight - lavaBottomHeight) + lavaBottomHeight - 10, size, frame));
+	}
+}
+
+function seedBubbles(count) {
+	for(var i = 0; i < count; i++) {
+		addBubble(Math.random()/2 + 0.5, Math.round(Math.random() * 600));
+	}
+}
+
+function clearBubbles() {
+	bubbles1.length = 0;
+	bubbles2.length = 0;
+}
+
+function drawBubble(bubble) {
+	if(bubble.frame > 610) {
+		// don't draw bubble
+	} else {
+		// draw base
+		var size1 = bubble.frame * bubble.size / 40;
+		if(size1 > 10 * bubble.size) {
+			size1 = 10 * bubble.size;
+		}
+		ctx.beginPath();
+		ctx.moveTo(
+			bubble.x - size1 - camera.x,
+			canvas.height - bubble.y - camera.y
+		);
+		ctx.quadraticCurveTo(
+			bubble.x - camera.x,
+			canvas.height - bubble.y + size1/2 - camera.y,
+			bubble.x + size1 - camera.x,
+			canvas.height - bubble.y - camera.y
+		);
+		ctx.quadraticCurveTo(
+			bubble.x - camera.x,
+			canvas.height - bubble.y - 12.5 * size1/(10 * bubble.size) - camera.y,
+			bubble.x - size1 - camera.x,
+			canvas.height - bubble.y - camera.y
+		);
+		ctx.fillStyle = lavaSurfaceColor;
+		ctx.fill();
+		ctx.closePath();
+		// draw popping animation
+		var size2 = (bubble.frame - 600) * bubble.size;
+		if(size2 < 0) {
+			size2 = 0;
+		}
+		ctx.beginPath();
+		ctx.moveTo(
+			bubble.x - size1 - camera.x,
+			canvas.height - bubble.y - camera.y
+		);
+		ctx.quadraticCurveTo(
+			bubble.x - camera.x,
+			canvas.height - bubble.y - 12.5 * size1/(10 * bubble.size) + 2 * size2 - camera.y,
+			bubble.x + size1 - camera.x,
+			canvas.height - bubble.y - camera.y
+		);
+		ctx.quadraticCurveTo(
+			bubble.x - camera.x,
+			canvas.height - bubble.y - 12.5 * size1/(10 * bubble.size) - camera.y,
+			bubble.x - size1 - camera.x,
+			canvas.height - bubble.y - camera.y
+		);
+		ctx.fillStyle = lavaMainColor;
+		ctx.fill();
+		ctx.closePath();
+		bubble.frame += 1;
+	}
 }

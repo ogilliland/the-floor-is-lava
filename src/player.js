@@ -26,20 +26,21 @@ function Camera(width, height) {
 	this.y = 0;
 	this.width = width;
 	this.height = height;
-	this.parallaxX = 2;
-	this.parallaxY = 4;
+	this.speedX = 4;
+	this.speedY = 4;
+	this.parallaxX = 0;
+	this.parallaxY = 2;
 	this.follow = function(target) {
-		this.x = (target.x - canvas.width + this.width/2)/this.parallaxX;
-		if(this.x < (target.x - 9 * canvas.width/10)) {
-			this.x = (target.x - 9 * canvas.width/10);
-		} else if(this.x > target.x - canvas.width/10) {
-			this.x = target.x - canvas.width/10;
-		}
+		this.x += (target.x - canvas.width/2 - this.x) * this.speedX/100;
 		if(canvas.height > this.height) {
-			this.y = (target.y - canvas.height/2)/this.parallaxY;
+			this.y += ((target.y - canvas.height/2)/this.parallaxY - this.y) * this.speedY/100;
 		} else {
 			this.y = 0;
 		}
+	}
+	this.snapTo = function(target) {
+		this.x = target.x - canvas.width/2;
+		this.y = target.y - canvas.height/2;
 	}
 }
 
