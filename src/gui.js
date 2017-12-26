@@ -1,5 +1,5 @@
-var titleColor = "rgba(255, 255, 255, 1)";
-var textColor = "rgba(200, 200, 200, 1)";
+var titleColor = "rgba(250, 250, 250, 1)"; // same as game background color
+var textColor = "rgba(100, 100, 100, 1)"; // same as rock color
 
 function drawScore() {
 	ctx.font = "100 24px sans-serif";

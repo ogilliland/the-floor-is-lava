@@ -2,7 +2,6 @@
 var gravity = 0.5;
 var friction = 0.2;
 var meltRate = 0.2;
-var multiplier = 1;
 
 // the floor is lava
 var lavaBottomColor = "rgba(255, 128, 0, 0.875)";
@@ -11,8 +10,6 @@ var lavaSurfaceColor = "rgba(255, 192, 0, 1)";
 var lavaBottomHeight = 125;
 var lavaMainHeight = 200;
 var lavaSurfaceHeight = 3;
-var debrisMainColor = "rgba(100, 100, 100, 1)";
-var debrisShadowColor = "rgba(75, 75, 75, 1)";
 
 function drawBackground(camera) {
 	ctx.beginPath();

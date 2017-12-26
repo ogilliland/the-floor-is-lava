@@ -27,6 +27,10 @@
 
 	// setup
 	var score = 0;
+	var furthest = 0;
+	var multiplier = 1;
+	var maxDistance = 0;
+	var extraDistance = 0;
 	var player = new Player();
 	var camera = new Camera(800, 600);
 	var newGame = true;
@@ -38,8 +42,10 @@
 
 	function init() {
 		score = 0;
-		player.height = 100;
-		player.weight = 200; // used to control line thickness
+		furthest = 0;
+		multiplier = 1;
+		player.height = 150;
+		player.weight = 600; // used to control line thickness
 		player.speed = 10;
 		player.x = camera.width/2;
 		player.y = camera.height - lavaMainHeight - lavaBottomHeight - 100;
@@ -51,8 +57,21 @@
 		clearDebris();
 		clearBubbles();
 		seedBubbles(100);
-		addDebris(camera.width/2, 125/4, camera.width - 100, 125, 20);
-		addDebris(3 * camera.width/2, 125/4, camera.width - 100, 125, 20);
+		maxDistance = 0;
+		extraDistance = 0;
+		/* for(var i = 0; i < 3; i++) {
+			maxDistance += extraDistance;
+			addDebris(camera.width/2 + maxDistance, Math.round(Math.random() * 2));
+			extraDistance = (1.5 + 0.75 * Math.random()) * (multiplier/2 + 0.5) * camera.width/2;
+		} */
+	}
+
+	function createDebris() {
+		while(maxDistance - player.x < canvas.width/2) {
+			maxDistance += extraDistance;
+			addDebris(camera.width/2 + maxDistance, Math.round(Math.random() * 2));
+			extraDistance = (1.5 + 0.75 * Math.random()) * (multiplier/2 + 0.5) * camera.width/2;
+		}
 	}
 
 	window.onkeyup = function(e) {
@@ -101,16 +120,19 @@
 		} else {
 			// update positions and values
 			if(player.isAlive) {
+				createDebris();
+				calculateVisibleDebris(camera);
 				simulatePhysics();
 				camera.follow(player);
 			}
 			// render objects
 			drawBackground(camera); // lava
-			drawDebris(camera);
+			drawDebrisBackground(camera);
 			if(player.isAlive) {
 				drawScore();
 				drawPlayer(camera, player);
 			}
+			drawDebrisForeground(camera);
 			drawForeground(camera); // lava
 			if(!player.isAlive) {
 				drawGameOver();

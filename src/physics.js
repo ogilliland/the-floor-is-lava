@@ -16,16 +16,20 @@ function make3dY(vy, depth) {
 
 function simulatePhysics() {
 	if(player.control.jump > 0 && player.onGround) {
-		player.dy = -20;
+		player.dy = -40 * gravity;
 		player.onGround = false;
+	} else if(player.control.jump == 0 && !player.onGround) {
+		if(player.dy < 0) {
+			player.dy = player.dy/1.05;
+		}
 	}
 	if(player.control.left - player.control.right > 0) {
-		if(player.dx < player.speed) {
-			player.dx += player.speed/10;
+		if(player.dx < (multiplier/2 + 0.5) * player.speed) {
+			player.dx += (multiplier/2 + 0.5) * player.speed/10;
 		}
 	} else if (player.control.left - player.control.right < 0) {
-		if(player.dx > (-1) * player.speed) {
-			player.dx += (-1) * player.speed/10;
+		if(player.dx > (-1) * (multiplier/2 + 0.5) * player.speed) {
+			player.dx += (-1) * (multiplier/2 + 0.5) * player.speed/10;
 		}
 	} else {
 		player.dx += (-1) * player.dx * friction;
@@ -35,57 +39,61 @@ function simulatePhysics() {
 	player.dy += gravity;
 	var activePlatform = -1;
 	for(var i = 0; i < debris.length; i++) {
-		// rotate debris
-		debris[i].a += debris[i].da;
-		debris[i].da = (-0.0005) * debris[i].a + 0.975 * debris[i].da;
-		// melt debris
-		debris[i].height += (debris[i].targetHeight - debris[i].height)/10;
-		debris[i].y += (debris[i].targetY - debris[i].y)/10;
-		// make player collide with debris surface
-		var leftPoint = calculateVertX(
-					debris[i].x,
-					-0.5 * debris[i].width,
-					-0.5 * debris[i].height,
-					debris[i].a
-		)
-		var rightPoint = calculateVertX(
-					debris[i].x,
-					0.5 * debris[i].width,
-					-0.5 * debris[i].height,
-					debris[i].a
-		)
-		if(player.x > leftPoint && player.x < rightPoint) {
-			activePlatform = i;
-			var leftHeight = calculateVertY(
-						debris[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+		if(debris[i].visible) {
+			// rotate debris
+			debris[i].a += debris[i].da;
+			debris[i].da = (-0.0005) * debris[i].a + 0.975 * debris[i].da;
+			// melt debris
+			debris[i].height += (debris[i].targetHeight - debris[i].height)/10;
+			debris[i].y += (debris[i].targetY - debris[i].y)/10;
+			// make player collide with debris surface
+			var leftPoint = calculateVertX(
+						debris[i].x,
 						-0.5 * debris[i].width,
 						-0.5 * debris[i].height,
 						debris[i].a
 			)
-			var rightHeight = calculateVertY(
-						debris[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+			var rightPoint = calculateVertX(
+						debris[i].x,
 						0.5 * debris[i].width,
 						-0.5 * debris[i].height,
 						debris[i].a
 			)
-			var slope = (rightHeight - leftHeight)/(rightPoint - leftPoint);
-			var platformSurface = leftHeight + slope * (player.x - leftPoint);
-			if(player.y > platformSurface && (player.y - player.dy - player.speed) < platformSurface) {
-				if(player.onGround) {
-					// player is resting on surface
-					debris[i].da += (player.x - debris[i].x)/1000000;
-					debris[i].melt(meltRate * multiplier);
-				} else {
-					// player just landed on surface
-					if(i > score) {
-						score = i;
+			if(player.x > leftPoint && player.x < rightPoint) {
+				activePlatform = i;
+				var leftHeight = calculateVertY(
+							debris[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+							-0.5 * debris[i].width,
+							-0.5 * debris[i].height,
+							debris[i].a
+				)
+				var rightHeight = calculateVertY(
+							debris[i].y + (canvas.height - lavaMainHeight - lavaSurfaceHeight),
+							0.5 * debris[i].width,
+							-0.5 * debris[i].height,
+							debris[i].a
+				)
+				var slope = (rightHeight - leftHeight)/(rightPoint - leftPoint);
+				var platformSurface = leftHeight + slope * (player.x - leftPoint);
+				if(player.y > platformSurface && (player.y - player.dy - player.speed) < platformSurface) {
+					if(player.onGround) {
+						// player is resting on surface
+						debris[i].da += (player.x - debris[i].x)/(1000 * debris[i].width);
+						debris[i].melt(meltRate * multiplier);
+					} else {
+						// player just landed on surface
+						if(i > furthest) {
+							score += (i - furthest) * multiplier * 100;
+							furthest = i;
+							multiplier = 1 + 0.25 * Math.floor(i/10);
+						}
+						debris[i].da += 2 * player.dy * (player.x - debris[i].x)/(1000 * debris[i].width);
+						debris[i].melt(50 * meltRate * multiplier);
+						player.onGround = true;
 					}
-					debris[i].da += 2 * player.dy * (player.x - debris[i].x)/1000000;
-					debris[i].melt(50 * meltRate * multiplier);
-					player.onGround = true;
+					player.y = platformSurface;
+					player.dy = 0;
 				}
-				player.y = platformSurface;
-				player.dy = 0;
 			}
 		}
 	}
