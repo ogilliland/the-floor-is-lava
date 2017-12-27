@@ -18,7 +18,7 @@ function simulatePhysics() {
 	if(player.control.jump > 0 && player.onGround) {
 		player.dy = -40 * gravity;
 		player.onGround = false;
-		if(Math.random() > 0.25) {
+		if(Math.random() > 0.5) {
 			// randomise drum variations
 			drums.soundQueue[0] = 1;
 		}
@@ -32,7 +32,7 @@ function simulatePhysics() {
 		} else {
 			// still holding jump
 			if(drums.soundQueue[1] == -1 && player.dy >= 0) {
-				if(Math.random() > 0.25) {
+				if(Math.random() > 0.5) {
 					// randomise drum variations
 					drums.soundQueue[1] = 1;
 				} else {
@@ -46,7 +46,7 @@ function simulatePhysics() {
 			player.dx += (multiplier/2 + 0.5) * player.speed/10;
 		}
 		if(drums.soundQueue[3] == -1) {
-			if(Math.random() > 0.25) {
+			if(Math.random() > 0.75) {
 				// randomise drum variations
 				drums.soundQueue[3] = 1;
 			} else {
@@ -58,7 +58,7 @@ function simulatePhysics() {
 			player.dx += (-1) * (multiplier/2 + 0.5) * player.speed/10;
 		}
 		if(drums.soundQueue[4] == -1) {
-			if(Math.random() > 0.25) {
+			if(Math.random() > 0.75) {
 				// randomise drum variations
 				drums.soundQueue[4] = 1;
 			} else {
@@ -126,7 +126,7 @@ function simulatePhysics() {
 						debris[i].da += 2 * player.dy * (player.x - debris[i].x)/(1000 * debris[i].width);
 						debris[i].melt(50 * meltRate * multiplier);
 						player.onGround = true;
-						if(Math.random() > 0.25) {
+						if(Math.random() > 0.5) {
 							// randomise drum variations
 							drums.soundQueue[2] = 1;
 						}

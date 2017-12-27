@@ -1,4 +1,4 @@
-var bpm = 100;
+var bpm = 120;
 var noteLength = 1/32;
 var playhead = 0;
 var deathRattle = true;
@@ -10,11 +10,11 @@ function drumKit() {
 	// load sounds
 	this.kick = new Howl({
 		src: ['sfx/drum_kick.mp3'],
-		volume: 0.5
+		volume: 1
 	});
 	this.hat = new Howl({
 		src: ['sfx/drum_hat.mp3'],
-		volume: 0.5
+		volume: 0.15
 	});
 	this.snare = new Howl({
 		src: ['sfx/drum_snare.mp3'],
@@ -100,11 +100,11 @@ function playDrums() {
 							drums.soundQueue[0] = 0;
 						} else if(drums.soundQueue[3] == 1) {
 							// right sound
-							// drums.tap.play();
+							drums.tap.play();
 							drums.soundQueue[3] = 0;
 						} else if(drums.soundQueue[4] == 1) {
 							// left sound
-							// drums.tap.play();
+							drums.tap.play();
 							drums.soundQueue[4] = 0;
 						}
 						accents[j][1] = false;
