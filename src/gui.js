@@ -9,8 +9,37 @@ function drawScore() {
 	ctx.fillText(scoreText, (canvas.width/2) - (textWidth/2), 50);
 	ctx.font = "100 12px sans-serif";
 	ctx.fillStyle = textColor;
-	var textWidth = ctx.measureText("x" + multiplier).width;
+	textWidth = ctx.measureText("x" + multiplier).width;
 	ctx.fillText("x" + multiplier, (canvas.width/2) - (textWidth/2), 75);
+	// add option text
+	ctx.font = "100 12px sans-serif";
+	ctx.lineWidth = 1;
+	if(!mute) {
+		ctx.fillStyle = textColor;
+		ctx.strokeStyle = textColor;
+	} else {
+		ctx.fillStyle = "#000000";
+		ctx.strokeStyle = "#000000";
+	}
+	textWidth = ctx.measureText("Mute").width;
+	ctx.fillText("Mute", canvas.width - textWidth - 25, 35);
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - textWidth - 25, 38);
+	ctx.lineTo(canvas.width - textWidth - 16, 38);
+	ctx.stroke();
+	if(!force2d) {
+		ctx.fillStyle = textColor;
+		ctx.strokeStyle = textColor;
+	} else {
+		ctx.fillStyle = "#000000";
+		ctx.strokeStyle = "#000000";
+	}
+	textWidth = ctx.measureText("No 3D").width;
+	ctx.fillText("No 3D", 25, 35);
+	ctx.beginPath();
+	ctx.moveTo(25, 38);
+	ctx.lineTo(35, 38);
+	ctx.stroke();
 }
 
 function drawSplashScreen() {

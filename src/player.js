@@ -74,6 +74,20 @@ window.onkeydown = function(e) {
 	if(unicode == 13) {
 		player.control.return = 1;
 	}
+	if(unicode == 77) {
+		if(mute) {
+			mute = false;
+		} else {
+			mute = true;
+		}
+	}
+	if(unicode == 78) {
+		if(force2d) {
+			force2d = false;
+		} else {
+			force2d = true;
+		}
+	}
 }
 
 function drawPlayer(camera, player) {

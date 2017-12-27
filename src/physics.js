@@ -18,21 +18,57 @@ function simulatePhysics() {
 	if(player.control.jump > 0 && player.onGround) {
 		player.dy = -40 * gravity;
 		player.onGround = false;
-	} else if(player.control.jump == 0 && !player.onGround) {
-		if(player.dy < 0) {
-			player.dy = player.dy/1.05;
+		if(Math.random() > 0.25) {
+			// randomise drum variations
+			drums.soundQueue[0] = 1;
+		}
+		drums.soundQueue[1] = -1;
+	} else if(!player.onGround) {
+		if(player.control.jump == 0) {
+			// player released jump key
+			if(player.dy < 0) {
+				player.dy = player.dy/1.05;
+			}
+		} else {
+			// still holding jump
+			if(drums.soundQueue[1] == -1 && player.dy >= 0) {
+				if(Math.random() > 0.25) {
+					// randomise drum variations
+					drums.soundQueue[1] = 1;
+				} else {
+					drums.soundQueue[1] = 0;
+				}
+			}
 		}
 	}
 	if(player.control.left - player.control.right > 0) {
 		if(player.dx < (multiplier/2 + 0.5) * player.speed) {
 			player.dx += (multiplier/2 + 0.5) * player.speed/10;
 		}
+		if(drums.soundQueue[3] == -1) {
+			if(Math.random() > 0.25) {
+				// randomise drum variations
+				drums.soundQueue[3] = 1;
+			} else {
+				drums.soundQueue[3] = 0;
+			}
+		}
 	} else if (player.control.left - player.control.right < 0) {
 		if(player.dx > (-1) * (multiplier/2 + 0.5) * player.speed) {
 			player.dx += (-1) * (multiplier/2 + 0.5) * player.speed/10;
 		}
+		if(drums.soundQueue[4] == -1) {
+			if(Math.random() > 0.25) {
+				// randomise drum variations
+				drums.soundQueue[4] = 1;
+			} else {
+				drums.soundQueue[4] = 0;
+			}
+		}
 	} else {
 		player.dx += (-1) * player.dx * friction;
+		drums.soundQueue[3] = -1;
+		drums.soundQueue[4] = -1;
 	}
 	player.x += player.dx;
 	player.y += player.dy;
@@ -90,6 +126,10 @@ function simulatePhysics() {
 						debris[i].da += 2 * player.dy * (player.x - debris[i].x)/(1000 * debris[i].width);
 						debris[i].melt(50 * meltRate * multiplier);
 						player.onGround = true;
+						if(Math.random() > 0.25) {
+							// randomise drum variations
+							drums.soundQueue[2] = 1;
+						}
 					}
 					player.y = platformSurface;
 					player.dy = 0;

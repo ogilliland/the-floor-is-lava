@@ -8,6 +8,7 @@ var fabricMainColor = "rgba(100, 25, 175, 1)";
 var fabricShadowColor = "rgba(75, 25, 150, 1)";
 var fabricHighlightColor = "rgba(125, 50, 200, 1)";
 var lastDebris = 0;
+var force2d = false;
 
 function createDebris() {
 	while(maxDistance - player.x < canvas.width/2) {
@@ -36,7 +37,8 @@ function debrisSize(type) {
 		result = [
 			300 + 200 * Math.random(),
 			20,
-			100
+			100,
+			20
 		];
 		break;
 	case 2:
@@ -45,7 +47,8 @@ function debrisSize(type) {
 		result = [
 			cube,
 			cube,
-			cube/2
+			cube/2,
+			cube/10
 		];
 		break;
 	case 3:
@@ -53,7 +56,8 @@ function debrisSize(type) {
 		result = [
 			300 + 200 * Math.random(),
 			125,
-			100
+			100,
+			20
 		];
 		break;
 	case 4:
@@ -61,7 +65,8 @@ function debrisSize(type) {
 		result = [
 			400,
 			225,
-			50
+			50,
+			20
 		];
 		break;
 	case 5:
@@ -69,7 +74,8 @@ function debrisSize(type) {
 		result = [
 			400,
 			150,
-			50
+			50,
+			20
 		];
 		break;
 	case 6:
@@ -77,7 +83,8 @@ function debrisSize(type) {
 		result = [
 			100,
 			100,
-			75
+			75,
+			20
 		];
 		break;
 	case 7:
@@ -85,7 +92,8 @@ function debrisSize(type) {
 		result = [
 			250,
 			150,
-			50
+			50,
+			20
 		];
 		break;
 	/* case 8:
@@ -99,7 +107,8 @@ function debrisSize(type) {
 		result = [
 			300 + 300 * Math.random(),
 			25 * Math.round(Math.random() * 2) + 50,
-			50
+			50,
+			0
 		];
 	}
 	return result;
@@ -114,6 +123,7 @@ function Debris(x, type) {
 	this.width = size[0];
 	this.height = size[1];
 	this.depth = size[2];
+	this.detailWidth = size[3];
 	this.x = x;
 	this.y = 65 - this.height/4;
 	this.originalHeight = this.height;
@@ -122,12 +132,12 @@ function Debris(x, type) {
 	this.visible = false;
 	this.melt = function(rate) {
 		this.targetHeight += (-1) * rate * (this.originalHeight/200 + 0.5);
-		this.targetY += rate/2 * (this.originalHeight/200 + 0.5);
+		this.targetY += rate/4 * (this.originalHeight/200 + 0.5);
 		if(this.targetHeight < 10) {
-			this.targetY += 4 * (this.height - this.targetHeight) * (10 - this.targetHeight)/10;
-		}
-		if(this.targetHeight < 0) {
-			this.targetHeight = 0;
+			this.targetY += (this.height - this.targetHeight) * (10 - this.targetHeight)/10;
+			if(this.targetHeight < 0) {
+				this.targetHeight = 0;
+			}
 		}
 	}
 }
@@ -159,7 +169,6 @@ function drawDebrisBackground(camera) {
 			switch(debris[i].type) {
 			case 1:
 				// wood table
-				var detailWidth = 20;
 				// top surface
 				drawRect(
 					debris[i].x - camera.x,
@@ -179,12 +188,12 @@ function drawDebrisBackground(camera) {
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 2 * detailWidth,
+					0.5 * debris[i].width - 2 * debris[i].detailWidth,
 					-0.5 * debris[i].height - 50,
-					0.5 * debris[i].depth - detailWidth,
-					detailWidth,
+					0.5 * debris[i].depth - debris[i].detailWidth,
+					debris[i].detailWidth,
 					100,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -193,12 +202,12 @@ function drawDebrisBackground(camera) {
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 2 * detailWidth,
+					-0.5 * debris[i].width + 2 * debris[i].detailWidth,
 					-0.5 * debris[i].height - 50,
-					0.5 * debris[i].depth - detailWidth,
-					detailWidth,
+					0.5 * debris[i].depth - debris[i].detailWidth,
+					debris[i].detailWidth,
 					100,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -222,48 +231,47 @@ function drawDebrisBackground(camera) {
 					woodHighlightColor
 				);
 				// detail on front face
-				var detailWidth = debris[i].width/10;
 				// top triangle
 				ctx.beginPath();
 				ctx.moveTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
 						0,
-						-0.75 * detailWidth,
+						-0.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 						0,
-						-0.75 * detailWidth,
+						-0.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * debris[i].width - 1.75 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 1.75 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 1.75 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 1.75 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
@@ -275,13 +283,13 @@ function drawDebrisBackground(camera) {
 				ctx.moveTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.75 * detailWidth,
+						-0.75 * debris[i].detailWidth,
 						0,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.75 * detailWidth,
+						-0.75 * debris[i].detailWidth,
 						0,
 						debris[i].a
 					), -0.5 * debris[i].depth)
@@ -289,28 +297,28 @@ function drawDebrisBackground(camera) {
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * debris[i].width + detailWidth,
-						-0.5 * debris[i].height + 1.75 * detailWidth,
+						-0.5 * debris[i].width + debris[i].detailWidth,
+						-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + detailWidth,
-						-0.5 * debris[i].height + 1.75 * detailWidth,
+						-0.5 * debris[i].width + debris[i].detailWidth,
+						-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * debris[i].width + detailWidth,
-						0.5 * debris[i].height - 1.75 * detailWidth,
+						-0.5 * debris[i].width + debris[i].detailWidth,
+						0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + detailWidth,
-						0.5 * debris[i].height - 1.75 * detailWidth,
+						-0.5 * debris[i].width + debris[i].detailWidth,
+						0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
@@ -322,13 +330,13 @@ function drawDebrisBackground(camera) {
 				ctx.moveTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.75 * detailWidth,
+						0.75 * debris[i].detailWidth,
 						0,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.75 * detailWidth,
+						0.75 * debris[i].detailWidth,
 						0,
 						debris[i].a
 					), -0.5 * debris[i].depth)
@@ -336,28 +344,28 @@ function drawDebrisBackground(camera) {
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * debris[i].width - detailWidth,
-						-0.5 * debris[i].height + 1.75 * detailWidth,
+						0.5 * debris[i].width - debris[i].detailWidth,
+						-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - detailWidth,
-						-0.5 * debris[i].height + 1.75 * detailWidth,
+						0.5 * debris[i].width - debris[i].detailWidth,
+						-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * debris[i].width - detailWidth,
-						0.5 * debris[i].height - 1.75 * detailWidth,
+						0.5 * debris[i].width - debris[i].detailWidth,
+						0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - detailWidth,
-						0.5 * debris[i].height - 1.75 * detailWidth,
+						0.5 * debris[i].width - debris[i].detailWidth,
+						0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
@@ -370,41 +378,41 @@ function drawDebrisBackground(camera) {
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
 						0,
-						0.75 * detailWidth,
+						0.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 						0,
-						0.75 * detailWidth,
+						0.75 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * debris[i].width - 1.75 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 1.75 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 1.75 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 1.75 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
@@ -414,17 +422,16 @@ function drawDebrisBackground(camera) {
 				break;
 			case 3:
 				// inverted wood table
-				var detailWidth = 20;
 				// back legs
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 2 * detailWidth,
+					0.5 * debris[i].width - 2 * debris[i].detailWidth,
 					0,
-					0.5 * debris[i].depth - detailWidth,
-					detailWidth,
+					0.5 * debris[i].depth - debris[i].detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -433,12 +440,12 @@ function drawDebrisBackground(camera) {
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 2 * detailWidth,
+					-0.5 * debris[i].width + 2 * debris[i].detailWidth,
 					0,
-					0.5 * debris[i].depth - detailWidth,
-					detailWidth,
+					0.5 * debris[i].depth - debris[i].detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -448,12 +455,12 @@ function drawDebrisBackground(camera) {
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 2 * detailWidth,
+					0.5 * debris[i].width - 2 * debris[i].detailWidth,
 					0,
-					-0.5 * debris[i].depth + detailWidth,
-					detailWidth,
+					-0.5 * debris[i].depth + debris[i].detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -462,12 +469,12 @@ function drawDebrisBackground(camera) {
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 2 * detailWidth,
+					-0.5 * debris[i].width + 2 * debris[i].detailWidth,
 					0,
-					-0.5 * debris[i].depth + detailWidth,
-					detailWidth,
+					-0.5 * debris[i].depth + debris[i].detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -491,7 +498,6 @@ function drawDebrisBackground(camera) {
 				break;
 			case 4:
 				// wood dresser
-				var detailWidth = 20;
 				// side detail
 				drawRect(
 					debris[i].x - camera.x,
@@ -499,8 +505,8 @@ function drawDebrisBackground(camera) {
 					-0.5 * debris[i].width,
 					0,
 					0.25 * debris[i].depth,
-					detailWidth,
-					debris[i].height + detailWidth,
+					debris[i].detailWidth,
+					debris[i].height + debris[i].detailWidth,
 					0.5 * debris[i].depth,
 					debris[i].a,
 					woodMainColor,
@@ -513,8 +519,8 @@ function drawDebrisBackground(camera) {
 					0.5 * debris[i].width,
 					0,
 					0.25 * debris[i].depth,
-					detailWidth,
-					debris[i].height + detailWidth,
+					debris[i].detailWidth,
+					debris[i].height + debris[i].detailWidth,
 					0.5 * debris[i].depth,
 					debris[i].a,
 					woodMainColor,
@@ -542,56 +548,56 @@ function drawDebrisBackground(camera) {
 				ctx.moveTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * debris[i].width - 2 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						0.5 * debris[i].width - 2 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 2 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						0.5 * debris[i].width - 2 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * debris[i].width - 2 * detailWidth,
-						0.5 * detailWidth,
+						0.5 * debris[i].width - 2 * debris[i].detailWidth,
+						0.5 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 2 * detailWidth,
-						0.5 * detailWidth,
+						0.5 * debris[i].width - 2 * debris[i].detailWidth,
+						0.5 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 2 * detailWidth,
-						0.5 * detailWidth,
+						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+						0.5 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 2 * detailWidth,
-						0.5 * detailWidth,
+						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+						0.5 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 2 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 2 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
@@ -603,56 +609,56 @@ function drawDebrisBackground(camera) {
 				ctx.moveTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * debris[i].width - 2 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						0.5 * debris[i].width - 2 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 2 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						0.5 * debris[i].width - 2 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * debris[i].width - 2 * detailWidth,
-						-0.5 * detailWidth,
+						0.5 * debris[i].width - 2 * debris[i].detailWidth,
+						-0.5 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 2 * detailWidth,
-						-0.5 * detailWidth,
+						0.5 * debris[i].width - 2 * debris[i].detailWidth,
+						-0.5 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 2 * detailWidth,
-						-0.5 * detailWidth,
+						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+						-0.5 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 2 * detailWidth,
-						-0.5 * detailWidth,
+						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+						-0.5 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 2 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 2 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
@@ -665,16 +671,16 @@ function drawDebrisBackground(camera) {
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
 						0,
-						-1 * detailWidth,
+						-1 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 						0,
-						-1 * detailWidth,
+						-1 * debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
-					detailWidth/4,
+					debris[i].detailWidth/4,
 					0,
 					Math.PI*2
 				);
@@ -686,16 +692,16 @@ function drawDebrisBackground(camera) {
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
 						0,
-						detailWidth,
+						debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 						0,
-						detailWidth,
+						debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
-					detailWidth/4,
+					debris[i].detailWidth/4,
 					0,
 					Math.PI*2
 				);
@@ -705,7 +711,6 @@ function drawDebrisBackground(camera) {
 				break;
 			case 5:
 				// wood bookshelf
-				var detailWidth = 20;
 				// background
 				ctx.beginPath();
 				ctx.moveTo(
@@ -772,10 +777,10 @@ function drawDebrisBackground(camera) {
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 					0,
-					0.5 * debris[i].height + detailWidth/2,
+					0.5 * debris[i].height + debris[i].detailWidth/2,
 					0,
-					debris[i].width + detailWidth,
-					detailWidth,
+					debris[i].width + debris[i].detailWidth,
+					debris[i].detailWidth,
 					debris[i].depth,
 					debris[i].a,
 					woodMainColor,
@@ -789,7 +794,7 @@ function drawDebrisBackground(camera) {
 					-0.25 * debris[i].width,
 					0,
 					0,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
 					debris[i].depth,
 					debris[i].a,
@@ -803,7 +808,7 @@ function drawDebrisBackground(camera) {
 					0,
 					0,
 					0,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
 					debris[i].depth,
 					debris[i].a,
@@ -817,7 +822,7 @@ function drawDebrisBackground(camera) {
 					0.25 * debris[i].width,
 					0,
 					0,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
 					debris[i].depth,
 					debris[i].a,
@@ -832,7 +837,7 @@ function drawDebrisBackground(camera) {
 					-0.5 * debris[i].width,
 					0,
 					0,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
 					debris[i].depth,
 					debris[i].a,
@@ -846,7 +851,7 @@ function drawDebrisBackground(camera) {
 					0.5 * debris[i].width,
 					0,
 					0,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
 					debris[i].depth,
 					debris[i].a,
@@ -859,10 +864,10 @@ function drawDebrisBackground(camera) {
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 					0,
-					-0.5 * debris[i].height + detailWidth/2,
+					-0.5 * debris[i].height + debris[i].detailWidth/2,
 					0,
-					debris[i].width + detailWidth,
-					detailWidth,
+					debris[i].width + debris[i].detailWidth,
+					debris[i].detailWidth,
 					debris[i].depth,
 					debris[i].a,
 					woodMainColor,
@@ -872,17 +877,16 @@ function drawDebrisBackground(camera) {
 				break;
 			case 6:
 				// wood chair
-				var detailWidth = 20;
 				// back legs
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 0.5 * detailWidth,
+					0.5 * debris[i].width - 0.5 * debris[i].detailWidth,
 					0,
 					debris[i].depth/2,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -891,12 +895,12 @@ function drawDebrisBackground(camera) {
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 0.5 * detailWidth,
+					-0.5 * debris[i].width + 0.5 * debris[i].detailWidth,
 					0,
 					debris[i].depth/2,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -906,12 +910,12 @@ function drawDebrisBackground(camera) {
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 0.5 * detailWidth,
+					0.5 * debris[i].width - 0.5 * debris[i].detailWidth,
 					0,
 					-1 * debris[i].depth/2,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -920,12 +924,12 @@ function drawDebrisBackground(camera) {
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 0.5 * detailWidth,
+					-0.5 * debris[i].width + 0.5 * debris[i].detailWidth,
 					0,
 					-1 * debris[i].depth/2,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].height,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -936,10 +940,10 @@ function drawDebrisBackground(camera) {
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 					0,
-					-1 * debris[i].height/2 + 0.5 * detailWidth,
+					-1 * debris[i].height/2 + 0.5 * debris[i].detailWidth,
 					0,
 					debris[i].width,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].depth,
 					debris[i].a,
 					woodMainColor,
@@ -955,7 +959,7 @@ function drawDebrisBackground(camera) {
 					debris[i].depth/2,
 					debris[i].width,
 					debris[i].originalHeight,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -964,7 +968,6 @@ function drawDebrisBackground(camera) {
 				break;
 			case 7:
 				// wood cabinet
-				var detailWidth = 20;
 				// main body
 				drawRect(
 					debris[i].x - camera.x,
@@ -986,56 +989,56 @@ function drawDebrisBackground(camera) {
 				ctx.moveTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * debris[i].width - detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						0.5 * debris[i].width - debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						0.5 * debris[i].width - debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						0.5 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						0.5 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						0.5 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						0.5 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						0.5 * debris[i].width - detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						0.5 * debris[i].width - debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						0.5 * debris[i].width - debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
@@ -1047,56 +1050,56 @@ function drawDebrisBackground(camera) {
 				ctx.moveTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * debris[i].width + detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						-0.5 * debris[i].width + debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						-0.5 * debris[i].width + debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						-0.5 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * detailWidth,
-						0.5 * debris[i].height - detailWidth,
+						-0.5 * debris[i].detailWidth,
+						0.5 * debris[i].height - debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						-0.5 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						-0.5 * debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
 				ctx.lineTo(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-0.5 * debris[i].width + detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						-0.5 * debris[i].width + debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + detailWidth,
-						-0.5 * debris[i].height + detailWidth,
+						-0.5 * debris[i].width + debris[i].detailWidth,
+						-0.5 * debris[i].height + debris[i].detailWidth,
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
@@ -1108,17 +1111,17 @@ function drawDebrisBackground(camera) {
 				ctx.arc(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						-1 * detailWidth,
+						-1 * debris[i].detailWidth,
 						0,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-1 * detailWidth,
+						-1 * debris[i].detailWidth,
 						0,
 						debris[i].a
 					), -0.5 * debris[i].depth),
-					detailWidth/4,
+					debris[i].detailWidth/4,
 					0,
 					Math.PI*2
 				);
@@ -1129,17 +1132,17 @@ function drawDebrisBackground(camera) {
 				ctx.arc(
 					make3dX(calculateVertX(
 						debris[i].x - camera.x,
-						detailWidth,
+						debris[i].detailWidth,
 						0,
 						debris[i].a
 					), -0.5 * debris[i].depth),
 					make3dY(calculateVertY(
 						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						detailWidth,
+						debris[i].detailWidth,
 						0,
 						debris[i].a
 					), -0.5 * debris[i].depth),
-					detailWidth/4,
+					debris[i].detailWidth/4,
 					0,
 					Math.PI*2
 				);
@@ -1180,17 +1183,16 @@ function drawDebrisForeground(camera) {
 			switch(debris[i].type) {
 			case 1:
 				// wood table
-				var detailWidth = 20;
 				// front legs
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 2 * detailWidth,
+					0.5 * debris[i].width - 2 * debris[i].detailWidth,
 					-0.5 * debris[i].height - 50,
-					-0.5 * debris[i].depth + detailWidth,
-					detailWidth,
+					-0.5 * debris[i].depth + debris[i].detailWidth,
+					debris[i].detailWidth,
 					100,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -1199,12 +1201,12 @@ function drawDebrisForeground(camera) {
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 2 * detailWidth,
+					-0.5 * debris[i].width + 2 * debris[i].detailWidth,
 					-0.5 * debris[i].height - 50,
-					-0.5 * debris[i].depth + detailWidth,
-					detailWidth,
+					-0.5 * debris[i].depth + debris[i].detailWidth,
+					debris[i].detailWidth,
 					100,
-					detailWidth,
+					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
@@ -1213,7 +1215,6 @@ function drawDebrisForeground(camera) {
 				break;
 			case 4:
 				// wood dresser
-				var detailWidth = 20;
 				// side detail
 				drawRect(
 					debris[i].x - camera.x,
@@ -1221,8 +1222,8 @@ function drawDebrisForeground(camera) {
 					-0.5 * debris[i].width,
 					0,
 					-0.25 * debris[i].depth,
-					detailWidth,
-					debris[i].height + detailWidth,
+					debris[i].detailWidth,
+					debris[i].height + debris[i].detailWidth,
 					0.5 * debris[i].depth,
 					debris[i].a,
 					woodMainColor,
@@ -1235,8 +1236,8 @@ function drawDebrisForeground(camera) {
 					0.5 * debris[i].width,
 					0,
 					-0.25 * debris[i].depth,
-					detailWidth,
-					debris[i].height + detailWidth,
+					debris[i].detailWidth,
+					debris[i].height + debris[i].detailWidth,
 					0.5 * debris[i].depth,
 					debris[i].a,
 					woodMainColor,

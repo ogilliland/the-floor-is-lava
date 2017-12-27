@@ -14,12 +14,14 @@
 <canvas id="gameCanvas" width="800" height="600"></canvas>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="howler/src/howler.core.js"></script>
 
 <script src="src/gui.js"></script>
 <script src="src/world.js"></script>
 <script src="src/player.js"></script>
 <script src="src/debris.js"></script>
 <script src="src/physics.js"></script>
+<script src="src/audio.js"></script>
 
 <script>
 	var canvas = document.getElementById("gameCanvas");
@@ -57,6 +59,7 @@
 		clearDebris();
 		clearBubbles();
 		seedBubbles(100);
+		resetDrums();
 		maxDistance = 0;
 		extraDistance = 0;
 	}
@@ -79,17 +82,14 @@
 				calculateVisibleDebris(camera);
 				simulatePhysics();
 				camera.follow(player);
-			}
-			// render objects
-			drawBackground(camera); // lava
-			drawDebrisBackground(camera);
-			if(player.isAlive) {
+				// render objects
+				drawBackground(camera); // lava
+				drawDebrisBackground(camera);
 				drawScore();
 				drawPlayer(camera, player);
-			}
-			drawDebrisForeground(camera);
-			drawForeground(camera); // lava
-			if(!player.isAlive) {
+				drawDebrisForeground(camera);
+				drawForeground(camera); // lava
+			} else {
 				drawGameOver();
 				if(player.control.return > 0) {
 					init();
@@ -98,6 +98,7 @@
 		}
 		requestAnimationFrame(draw);
 	}
+	setInterval(playDrums, 1000 * noteLength);
 	draw();
 </script>
 
