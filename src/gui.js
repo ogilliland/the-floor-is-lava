@@ -4,8 +4,9 @@ var textColor = "rgba(100, 100, 100, 1)"; // same as rock color
 function drawScore() {
 	ctx.font = "100 24px sans-serif";
 	ctx.fillStyle = textColor;
-	var textWidth = ctx.measureText(score).width;
-	ctx.fillText(score, (canvas.width/2) - (textWidth/2), 50);
+	var scoreText = score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	var textWidth = ctx.measureText(scoreText).width;
+	ctx.fillText(scoreText, (canvas.width/2) - (textWidth/2), 50);
 	ctx.font = "100 12px sans-serif";
 	ctx.fillStyle = textColor;
 	var textWidth = ctx.measureText("x" + multiplier).width;
@@ -30,7 +31,7 @@ function drawSplashScreen() {
 	var titleWidth = ctx.measureText(title).width;
 	ctx.fillText(title, (canvas.width/2) - (titleWidth/2), (canvas.height/2) - 25);
 	ctx.font = "100 24px sans-serif";
-	var text = "Press enter to begin...";
+	var text = "Press ENTER to begin...";
 	var textWidth = ctx.measureText(text).width;
 	ctx.fillStyle = titleColor;
 	ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 100);
@@ -51,11 +52,19 @@ function drawGameOver() {
 	// text
 	ctx.font = "100 50px sans-serif";
 	ctx.fillStyle = titleColor;
-	var title = "YOU SCORED " + score + " POINTS";
-	var titleWidth = ctx.measureText(title).width;
-	ctx.fillText(title, (canvas.width/2) - (titleWidth/2), (canvas.height/2) - 25);
+	if(score == 0) {
+		var scoreText = "ZERO";
+	} else {
+		var scoreText = score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+	var title1 = "YOU SCORED";
+	var title2 =  scoreText + " POINTS";
+	var title1Width = ctx.measureText(title1).width;
+	ctx.fillText(title1, canvas.width/2 - title1Width/2, canvas.height/2 - 55);
+	var title2Width = ctx.measureText(title2).width;
+	ctx.fillText(title2, canvas.width/2 - title2Width/2, canvas.height/2 + 5);
 	ctx.font = "100 24px sans-serif";
-	var text = "Press enter to try again...";
+	var text = "Press ENTER to try again...";
 	var textWidth = ctx.measureText(text).width;
 	ctx.fillStyle = titleColor;
 	ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 100);

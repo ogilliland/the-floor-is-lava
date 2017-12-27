@@ -44,6 +44,38 @@ function Camera(width, height) {
 	}
 }
 
+window.onkeyup = function(e) {
+	var unicode = e.keyCode ? e.keyCode : e.charCode;
+	if(unicode == 37 || unicode == 65) {
+		player.control.right = 0;
+	}
+	if(unicode == 39 || unicode == 68) {
+		player.control.left = 0;
+	}
+	if(unicode == 87 || unicode == 38 || unicode == 32) {
+		player.control.jump = 0;
+	}
+	if(unicode == 13) {
+		player.control.return = 0;
+	}
+}
+
+window.onkeydown = function(e) {
+	var unicode = e.keyCode ? e.keyCode : e.charCode;
+	if(unicode == 37 || unicode == 65) {
+		player.control.right = 1;
+	}
+	if(unicode == 39 || unicode == 68) {
+		player.control.left = 1;
+	}
+	if(unicode == 87 || unicode == 38 || unicode == 32) {
+		player.control.jump = 1;
+	}
+	if(unicode == 13) {
+		player.control.return = 1;
+	}
+}
+
 function drawPlayer(camera, player) {
 	if(player.y - camera.y > 0) {
 		if(player.dx < 0) {

@@ -1,7 +1,32 @@
-var rockMainColor = "rgba(100, 100, 100, 1)";
-var rockShadowColor = "rgba(75, 75, 75, 1)";
-var woodMainColor = "rgba(140, 70, 0, 1)";
+var rockMainColor = "rgba(85, 85, 85, 1)";
+var rockShadowColor = "rgba(70, 70, 70, 1)";
+var rockHighlightColor = "rgba(100, 100, 100, 1)";
+var woodMainColor = "rgba(120, 60, 0, 1)";
 var woodShadowColor = "rgba(100, 50, 0, 1)";
+var woodHighlightColor = "rgba(140, 70, 0, 1)";
+var fabricMainColor = "rgba(100, 25, 175, 1)";
+var fabricShadowColor = "rgba(75, 25, 150, 1)";
+var fabricHighlightColor = "rgba(125, 50, 200, 1)";
+var lastDebris = 0;
+
+function createDebris() {
+	while(maxDistance - player.x < canvas.width/2) {
+		maxDistance += extraDistance;
+		var debrisType = Math.round(Math.random() * 9);
+		if(debrisType == lastDebris) {
+			debrisType = debrisType - 1;
+		}
+		if(debrisType < 0) {
+			debrisType = 0;
+		}
+		addDebris(camera.width/2 + maxDistance, debrisType);
+		lastDebris = debrisType;
+		extraDistance = camera.width/2 * (
+			1.5 * (multiplier/4 + 0.75) +
+			0.75 * (3 * multiplier/4 + 0.25) * Math.random()
+		);
+	}
+}
 
 function debrisSize(type) {
 	var result = [0, 0, 0];
@@ -10,7 +35,7 @@ function debrisSize(type) {
 		// wood table
 		result = [
 			300 + 200 * Math.random(),
-			25,
+			20,
 			100
 		];
 		break;
@@ -24,32 +49,57 @@ function debrisSize(type) {
 		];
 		break;
 	case 3:
-		// TODO - dresser
+		// inverted wood table
+		result = [
+			300 + 200 * Math.random(),
+			125,
+			100
+		];
 		break;
 	case 4:
-		// TODO - book shelf
+		// wood dresser
+		result = [
+			400,
+			225,
+			50
+		];
 		break;
 	case 5:
-		// TODO - chair
+		// wood bookshelf
+		result = [
+			400,
+			150,
+			50
+		];
 		break;
 	case 6:
-		// TODO - sofa
+		// wood chair
+		result = [
+			100,
+			100,
+			75
+		];
 		break;
 	case 7:
-		// TODO - inverted table
+		// wood cabinet
+		result = [
+			250,
+			150,
+			50
+		];
 		break;
-	case 8:
-		// TODO - cabinet
+	/* case 8:
+		// TODO - fabric sofa
 		break;
 	case 9:
-		// TODO - tall cabinet
-		break;
+		// TODO - fabric chair
+		break; */
 	default:
 		// rock
 		result = [
-			500,
+			300 + 300 * Math.random(),
 			25 * Math.round(Math.random() * 2) + 50,
-			40
+			50
 		];
 	}
 	return result;
@@ -109,6 +159,8 @@ function drawDebrisBackground(camera) {
 			switch(debris[i].type) {
 			case 1:
 				// wood table
+				var detailWidth = 20;
+				// top surface
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
@@ -120,33 +172,37 @@ function drawDebrisBackground(camera) {
 					debris[i].depth,
 					debris[i].a,
 					woodMainColor,
-					woodShadowColor
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// back legs
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 2 * detailWidth,
+					-0.5 * debris[i].height - 50,
+					0.5 * debris[i].depth - detailWidth,
+					detailWidth,
+					100,
+					detailWidth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
 				);
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 50,
-					(-1) * 50 - debris[i].height/2,
-					debris[i].depth/4,
-					20,
+					-0.5 * debris[i].width + 2 * detailWidth,
+					-0.5 * debris[i].height - 50,
+					0.5 * debris[i].depth - detailWidth,
+					detailWidth,
 					100,
-					20,
+					detailWidth,
 					debris[i].a,
 					woodMainColor,
-					woodShadowColor
-				);
-				drawRect(
-					debris[i].x - camera.x,
-					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 50,
-					(-1) * 50 - debris[i].height/2,
-					debris[i].depth/4,
-					20,
-					100,
-					20,
-					debris[i].a,
-					woodMainColor,
-					woodShadowColor
+					woodShadowColor,
+					woodHighlightColor
 				);
 				break;
 			case 2:
@@ -162,7 +218,8 @@ function drawDebrisBackground(camera) {
 					debris[i].depth,
 					debris[i].a,
 					woodMainColor,
-					woodShadowColor
+					woodShadowColor,
+					woodHighlightColor
 				);
 				// detail on front face
 				var detailWidth = debris[i].width/10;
@@ -210,7 +267,7 @@ function drawDebrisBackground(camera) {
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
-				ctx.fillStyle = woodShadowColor;
+				ctx.fillStyle = woodMainColor;
 				ctx.fill();
 				ctx.closePath();
 				// left triangle
@@ -257,7 +314,7 @@ function drawDebrisBackground(camera) {
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
-				ctx.fillStyle = woodShadowColor;
+				ctx.fillStyle = woodMainColor;
 				ctx.fill();
 				ctx.closePath();
 				// right triangle
@@ -304,7 +361,7 @@ function drawDebrisBackground(camera) {
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
-				ctx.fillStyle = woodShadowColor;
+				ctx.fillStyle = woodMainColor;
 				ctx.fill();
 				ctx.closePath();
 				// bottom triangle
@@ -351,31 +408,751 @@ function drawDebrisBackground(camera) {
 						debris[i].a
 					), -0.5 * debris[i].depth)
 				);
-				ctx.fillStyle = woodShadowColor;
+				ctx.fillStyle = woodMainColor;
 				ctx.fill();
 				ctx.closePath();
 				break;
 			case 3:
-				// TODO - dresser
+				// inverted wood table
+				var detailWidth = 20;
+				// back legs
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 2 * detailWidth,
+					0,
+					0.5 * debris[i].depth - detailWidth,
+					detailWidth,
+					debris[i].height,
+					detailWidth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width + 2 * detailWidth,
+					0,
+					0.5 * debris[i].depth - detailWidth,
+					detailWidth,
+					debris[i].height,
+					detailWidth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// front legs
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 2 * detailWidth,
+					0,
+					-0.5 * debris[i].depth + detailWidth,
+					detailWidth,
+					debris[i].height,
+					detailWidth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width + 2 * detailWidth,
+					0,
+					-0.5 * debris[i].depth + detailWidth,
+					detailWidth,
+					debris[i].height,
+					detailWidth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// top surface
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					-1 * debris[i].height/2 + 10,
+					0,
+					debris[i].width,
+					20,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
 				break;
 			case 4:
-				// TODO - book shelf
+				// wood dresser
+				var detailWidth = 20;
+				// side detail
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width,
+					0,
+					0.25 * debris[i].depth,
+					detailWidth,
+					debris[i].height + detailWidth,
+					0.5 * debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width,
+					0,
+					0.25 * debris[i].depth,
+					detailWidth,
+					debris[i].height + detailWidth,
+					0.5 * debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// main body
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// detail on front face
+				// door 1
+				ctx.beginPath();
+				ctx.moveTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0.5 * debris[i].width - 2 * detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0.5 * debris[i].width - 2 * detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0.5 * debris[i].width - 2 * detailWidth,
+						0.5 * detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0.5 * debris[i].width - 2 * detailWidth,
+						0.5 * detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-0.5 * debris[i].width + 2 * detailWidth,
+						0.5 * detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-0.5 * debris[i].width + 2 * detailWidth,
+						0.5 * detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-0.5 * debris[i].width + 2 * detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-0.5 * debris[i].width + 2 * detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.fillStyle = woodMainColor;
+				ctx.fill();
+				ctx.closePath();
+				// door 2
+				ctx.beginPath();
+				ctx.moveTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0.5 * debris[i].width - 2 * detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0.5 * debris[i].width - 2 * detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0.5 * debris[i].width - 2 * detailWidth,
+						-0.5 * detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0.5 * debris[i].width - 2 * detailWidth,
+						-0.5 * detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-0.5 * debris[i].width + 2 * detailWidth,
+						-0.5 * detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-0.5 * debris[i].width + 2 * detailWidth,
+						-0.5 * detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-0.5 * debris[i].width + 2 * detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-0.5 * debris[i].width + 2 * detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.fillStyle = woodMainColor;
+				ctx.fill();
+				ctx.closePath();
+				// handles
+				ctx.beginPath();
+				ctx.arc(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0,
+						-1 * detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0,
+						-1 * detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					detailWidth/4,
+					0,
+					Math.PI*2
+				);
+				ctx.fillStyle = woodHighlightColor;
+				ctx.fill();
+				ctx.closePath();
+				ctx.beginPath();
+				ctx.arc(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0,
+						detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0,
+						detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					detailWidth/4,
+					0,
+					Math.PI*2
+				);
+				ctx.fillStyle = woodHighlightColor;
+				ctx.fill();
+				ctx.closePath();
 				break;
 			case 5:
-				// TODO - chair
+				// wood bookshelf
+				var detailWidth = 20;
+				// background
+				ctx.beginPath();
+				ctx.moveTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0.5 * debris[i].width,
+						0.5 * debris[i].height,
+						debris[i].a
+					), 0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0.5 * debris[i].width,
+						0.5 * debris[i].height,
+						debris[i].a
+					), 0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0.5 * debris[i].width,
+						-0.5 * debris[i].height,
+						debris[i].a
+					), 0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0.5 * debris[i].width,
+						-0.5 * debris[i].height,
+						debris[i].a
+					), 0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-0.5 * debris[i].width,
+						-0.5 * debris[i].height,
+						debris[i].a
+					), 0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-0.5 * debris[i].width,
+						-0.5 * debris[i].height,
+						debris[i].a
+					), 0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-0.5 * debris[i].width,
+						0.5 * debris[i].height,
+						debris[i].a
+					), 0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-0.5 * debris[i].width,
+						0.5 * debris[i].height,
+						debris[i].a
+					), 0.5 * debris[i].depth)
+				);
+				ctx.fillStyle = woodShadowColor;
+				ctx.fill();
+				ctx.closePath();
+				// base
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0.5 * debris[i].height + detailWidth/2,
+					0,
+					debris[i].width + detailWidth,
+					detailWidth,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// shelves
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.25 * debris[i].width,
+					0,
+					0,
+					detailWidth,
+					debris[i].height,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					0,
+					detailWidth,
+					debris[i].height,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.25 * debris[i].width,
+					0,
+					0,
+					detailWidth,
+					debris[i].height,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// sides
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width,
+					0,
+					0,
+					detailWidth,
+					debris[i].height,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width,
+					0,
+					0,
+					detailWidth,
+					debris[i].height,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// top
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					-0.5 * debris[i].height + detailWidth/2,
+					0,
+					debris[i].width + detailWidth,
+					detailWidth,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
 				break;
 			case 6:
-				// TODO - sofa
+				// wood chair
+				var detailWidth = 20;
+				// back legs
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 0.5 * detailWidth,
+					0,
+					debris[i].depth/2,
+					detailWidth,
+					debris[i].height,
+					detailWidth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width + 0.5 * detailWidth,
+					0,
+					debris[i].depth/2,
+					detailWidth,
+					debris[i].height,
+					detailWidth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// front legs
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 0.5 * detailWidth,
+					0,
+					-1 * debris[i].depth/2,
+					detailWidth,
+					debris[i].height,
+					detailWidth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width + 0.5 * detailWidth,
+					0,
+					-1 * debris[i].depth/2,
+					detailWidth,
+					debris[i].height,
+					detailWidth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// top surface
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					-1 * debris[i].height/2 + 0.5 * detailWidth,
+					0,
+					debris[i].width,
+					detailWidth,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// back surface
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					-1 * debris[i].height/2 - debris[i].originalHeight/2,
+					debris[i].depth/2,
+					debris[i].width,
+					debris[i].originalHeight,
+					detailWidth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
 				break;
 			case 7:
-				// TODO - inverted table
+				// wood cabinet
+				var detailWidth = 20;
+				// main body
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				// detail on front face
+				// door 1
+				ctx.beginPath();
+				ctx.moveTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0.5 * debris[i].width - detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0.5 * debris[i].width - detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0.5 * detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0.5 * detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0.5 * detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0.5 * detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						0.5 * debris[i].width - detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						0.5 * debris[i].width - detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.fillStyle = woodMainColor;
+				ctx.fill();
+				ctx.closePath();
+				// door 2
+				ctx.beginPath();
+				ctx.moveTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-0.5 * debris[i].width + detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-0.5 * debris[i].width + detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-0.5 * detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-0.5 * detailWidth,
+						0.5 * debris[i].height - detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-0.5 * detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-0.5 * detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.lineTo(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-0.5 * debris[i].width + detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-0.5 * debris[i].width + detailWidth,
+						-0.5 * debris[i].height + detailWidth,
+						debris[i].a
+					), -0.5 * debris[i].depth)
+				);
+				ctx.fillStyle = woodMainColor;
+				ctx.fill();
+				ctx.closePath();
+				// handles
+				ctx.beginPath();
+				ctx.arc(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						-1 * detailWidth,
+						0,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						-1 * detailWidth,
+						0,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					detailWidth/4,
+					0,
+					Math.PI*2
+				);
+				ctx.fillStyle = woodHighlightColor;
+				ctx.fill();
+				ctx.closePath();
+				ctx.beginPath();
+				ctx.arc(
+					make3dX(calculateVertX(
+						debris[i].x - camera.x,
+						detailWidth,
+						0,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					make3dY(calculateVertY(
+						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						detailWidth,
+						0,
+						debris[i].a
+					), -0.5 * debris[i].depth),
+					detailWidth/4,
+					0,
+					Math.PI*2
+				);
+				ctx.fillStyle = woodHighlightColor;
+				ctx.fill();
+				ctx.closePath();
 				break;
-			case 8:
-				// TODO - cabinet
+			/* case 8:
+				// TODO - fabric sofa
 				break;
 			case 9:
-				// TODO - tall cabinet
-				break;
+				// TODO - fabric chair
+				break; */
 			default:
 				// rock
 				drawRect(
@@ -389,7 +1166,8 @@ function drawDebrisBackground(camera) {
 					debris[i].depth,
 					debris[i].a,
 					rockMainColor,
-					rockShadowColor
+					rockShadowColor,
+					rockHighlightColor
 				);
 			}
 		}
@@ -401,31 +1179,69 @@ function drawDebrisForeground(camera) {
 		if(debris[i].visible) {
 			switch(debris[i].type) {
 			case 1:
+				// wood table
+				var detailWidth = 20;
+				// front legs
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 50,
-					(-1) * 50 - debris[i].height/2,
-					(-1) * debris[i].depth/4,
-					20,
+					0.5 * debris[i].width - 2 * detailWidth,
+					-0.5 * debris[i].height - 50,
+					-0.5 * debris[i].depth + detailWidth,
+					detailWidth,
 					100,
-					20,
+					detailWidth,
 					debris[i].a,
 					woodMainColor,
-					woodShadowColor
+					woodShadowColor,
+					woodHighlightColor
 				);
 				drawRect(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 50,
-					(-1) * 50 - debris[i].height/2,
-					(-1) * debris[i].depth/4,
-					20,
+					-0.5 * debris[i].width + 2 * detailWidth,
+					-0.5 * debris[i].height - 50,
+					-0.5 * debris[i].depth + detailWidth,
+					detailWidth,
 					100,
-					20,
+					detailWidth,
 					debris[i].a,
 					woodMainColor,
-					woodShadowColor
+					woodShadowColor,
+					woodHighlightColor
+				);
+				break;
+			case 4:
+				// wood dresser
+				var detailWidth = 20;
+				// side detail
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width,
+					0,
+					-0.25 * debris[i].depth,
+					detailWidth,
+					debris[i].height + detailWidth,
+					0.5 * debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
+				);
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width,
+					0,
+					-0.25 * debris[i].depth,
+					detailWidth,
+					debris[i].height + detailWidth,
+					0.5 * debris[i].depth,
+					debris[i].a,
+					woodMainColor,
+					woodShadowColor,
+					woodHighlightColor
 				);
 				break;
 			default:
@@ -435,7 +1251,7 @@ function drawDebrisForeground(camera) {
 	}
 }
 
-function drawRect(ox, oy, x, y, z, width, height, depth, angle, c1, c2) {
+function drawRect(ox, oy, x, y, z, width, height, depth, angle, c1, c2, c3) {
 	ctx.lineWidth = 1;
 	// right face
 	ctx.beginPath();
@@ -684,9 +1500,9 @@ function drawRect(ox, oy, x, y, z, width, height, depth, angle, c1, c2) {
 			angle
 		), z - 0.5 * depth)
 	);
-	ctx.strokeStyle = c1;
+	ctx.strokeStyle = c3;
 	ctx.stroke();
-	ctx.fillStyle = c1;
+	ctx.fillStyle = c3;
 	ctx.fill();
 	ctx.closePath();
 }
