@@ -1259,10 +1259,10 @@ function drawDebrisBackground(camera) {
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 					-0.5 * debris[i].width + 0.5 * debris[i].detailWidth,
-					0,
+					-0.5 * debris[i].detailWidth,
 					-0.5 * debris[i].depth,
 					debris[i].detailWidth,
-					debris[i].height,
+					debris[i].height + debris[i].detailWidth,
 					debris[i].detailWidth,
 					debris[i].a,
 					fabricMainColor,
@@ -1272,7 +1272,7 @@ function drawDebrisBackground(camera) {
 				drawCircle(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].width,
 					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
 					0,
 					2 * debris[i].detailWidth,
@@ -1287,10 +1287,10 @@ function drawDebrisBackground(camera) {
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 					0.5 * debris[i].width - 0.5 * debris[i].detailWidth,
-					0,
+					-0.5 * debris[i].detailWidth,
 					-0.5 * debris[i].depth,
 					debris[i].detailWidth,
-					debris[i].height,
+					debris[i].height + debris[i].detailWidth,
 					debris[i].detailWidth,
 					debris[i].a,
 					fabricMainColor,
@@ -1300,7 +1300,7 @@ function drawDebrisBackground(camera) {
 				drawCircle(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 0.25 * debris[i].detailWidth,
+					0.5 * debris[i].width,
 					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
 					0,
 					2 * debris[i].detailWidth,
@@ -1359,10 +1359,10 @@ function drawDebrisBackground(camera) {
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 					-0.5 * debris[i].width + 0.5 * debris[i].detailWidth,
-					0,
+					-0.5 * debris[i].detailWidth,
 					-0.5 * debris[i].depth,
 					debris[i].detailWidth,
-					debris[i].height,
+					debris[i].height + debris[i].detailWidth,
 					debris[i].detailWidth,
 					debris[i].a,
 					fabricMainColor,
@@ -1372,7 +1372,7 @@ function drawDebrisBackground(camera) {
 				drawCircle(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].width,
 					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
 					0,
 					2 * debris[i].detailWidth,
@@ -1387,10 +1387,10 @@ function drawDebrisBackground(camera) {
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 					0.5 * debris[i].width - 0.5 * debris[i].detailWidth,
-					0,
+					-0.5 * debris[i].detailWidth,
 					-0.5 * debris[i].depth,
 					debris[i].detailWidth,
-					debris[i].height,
+					debris[i].height + debris[i].detailWidth,
 					debris[i].detailWidth,
 					debris[i].a,
 					fabricMainColor,
@@ -1400,7 +1400,7 @@ function drawDebrisBackground(camera) {
 				drawCircle(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 0.25 * debris[i].detailWidth,
+					0.5 * debris[i].width,
 					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
 					0,
 					2 * debris[i].detailWidth,
@@ -1540,7 +1540,7 @@ function drawDebrisForeground(camera) {
 				drawCircle(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 0.25 * debris[i].detailWidth,
+					0.5 * debris[i].width,
 					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
 					-0.25 * debris[i].depth,
 					2 * debris[i].detailWidth,
@@ -1553,7 +1553,7 @@ function drawDebrisForeground(camera) {
 				drawCircle(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].width,
 					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
 					-0.25 * debris[i].depth,
 					2 * debris[i].detailWidth,
@@ -1569,7 +1569,7 @@ function drawDebrisForeground(camera) {
 				drawCircle(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					0.5 * debris[i].width - 0.25 * debris[i].detailWidth,
+					0.5 * debris[i].width,
 					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
 					-0.25 * debris[i].depth,
 					2 * debris[i].detailWidth,
@@ -1582,7 +1582,7 @@ function drawDebrisForeground(camera) {
 				drawCircle(
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-					-0.5 * debris[i].width + 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].width,
 					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
 					-0.25 * debris[i].depth,
 					2 * debris[i].detailWidth,
@@ -2226,7 +2226,7 @@ function drawCircle(ox, oy, x, y, z, diameter, depth, angle, c1, c2, c3) {
 			0,
 			Math.PI*2
 		);
-		ctx.strokeStyle = c2;
+		ctx.strokeStyle = c3;
 		ctx.stroke();
 		ctx.fillStyle = c3;
 		ctx.fill();

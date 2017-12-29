@@ -38,7 +38,7 @@ function drawBackground(camera) {
 	ctx.fill();
 	ctx.closePath();
 	if(Math.random() > 0.625) {
-		addBubble(Math.random()/2 + 0.5, 0);
+		addBubble(0.5 * Math.random() + 0.25, 0);
 	}
 	for(var i = 0; i < bubbles1.length; i++) {
 		drawBubble(bubbles1[i]);
@@ -86,7 +86,7 @@ function addBubble(size, frame) {
 
 function seedBubbles(count) {
 	for(var i = 0; i < count; i++) {
-		addBubble(Math.random()/2 + 0.5, Math.round(Math.random() * 600));
+		addBubble(0.5 * Math.random() + 0.25, Math.round(Math.random() * 600));
 	}
 }
 
@@ -124,7 +124,7 @@ function drawBubble(bubble) {
 		ctx.closePath();
 		bubble.frame ++;
 	} else {
-		// draw base
+		// draw bubble
 		var size1 = bubble.frame * bubble.size / 40;
 		if(size1 > 10 * bubble.size) {
 			size1 = 10 * bubble.size;
@@ -136,13 +136,13 @@ function drawBubble(bubble) {
 		);
 		ctx.quadraticCurveTo(
 			bubble.x - camera.x,
-			canvas.height - bubble.y + size1/2 - camera.y,
+			canvas.height - bubble.y + 0.5 * size1 - camera.y,
 			bubble.x + size1 - camera.x,
 			canvas.height - bubble.y - camera.y
 		);
 		ctx.quadraticCurveTo(
 			bubble.x - camera.x,
-			canvas.height - bubble.y - 12.5 * size1/(10 * bubble.size) - camera.y,
+			canvas.height - bubble.y - 1.75 * size1 - camera.y,
 			bubble.x - size1 - camera.x,
 			canvas.height - bubble.y - camera.y
 		);
@@ -161,13 +161,13 @@ function drawBubble(bubble) {
 		);
 		ctx.quadraticCurveTo(
 			bubble.x - camera.x,
-			canvas.height - bubble.y - 12.5 * size1/(10 * bubble.size) + 2 * size2 - camera.y,
+			canvas.height - bubble.y - 1.75 * size1 + 2 * size2 - camera.y,
 			bubble.x + size1 - camera.x,
 			canvas.height - bubble.y - camera.y
 		);
 		ctx.quadraticCurveTo(
 			bubble.x - camera.x,
-			canvas.height - bubble.y - 12.5 * size1/(10 * bubble.size) - camera.y,
+			canvas.height - bubble.y - 1.75 * size1 - camera.y,
 			bubble.x - size1 - camera.x,
 			canvas.height - bubble.y - camera.y
 		);
