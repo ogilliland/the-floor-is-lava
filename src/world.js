@@ -37,7 +37,7 @@ function drawBackground(camera) {
 	ctx.fillStyle = lavaSurfaceColor;
 	ctx.fill();
 	ctx.closePath();
-	if(Math.random() > 0.75) {
+	if(Math.random() > 0.625) {
 		addBubble(Math.random()/2 + 0.5, 0);
 	}
 	for(var i = 0; i < bubbles1.length; i++) {
@@ -78,9 +78,9 @@ var bubbles2 = new Array();
 
 function addBubble(size, frame) {
 	if(Math.random() > 0.25) {
-		bubbles2.push(new Bubble(Math.random() * (6 * canvas.width) + camera.x - 3 * canvas.width, Math.random() * 2 * originalBottomHeight - originalBottomHeight, size, frame));
+		bubbles2.push(new Bubble(Math.random() * (10 * canvas.width) + camera.x - 5 * canvas.width, Math.random() * 2 * originalBottomHeight - originalBottomHeight, size, frame));
 	} else {
-		bubbles1.push(new Bubble(Math.random() * (6 * canvas.width) + camera.x - 3 * canvas.width, Math.random() * (lavaMainHeight - originalBottomHeight) + originalBottomHeight - 10, size, frame));
+		bubbles1.push(new Bubble(Math.random() * (10 * canvas.width) + camera.x - 5 * canvas.width, Math.random() * (lavaMainHeight - originalBottomHeight + 10) + originalBottomHeight - 20, size, frame));
 	}
 }
 
@@ -96,8 +96,33 @@ function clearBubbles() {
 }
 
 function drawBubble(bubble) {
-	if(bubble.frame > 610) {
+	if(bubble.frame > 705) {
 		// don't draw bubble
+	} else if(bubble.frame > 605) {
+		var size3 = (1 + (bubble.frame - 605)/100) * 10 * bubble.size;
+		// draw ripple
+		ctx.lineWidth = 1;
+		ctx.beginPath();
+		ctx.moveTo(
+			bubble.x - size3 - camera.x,
+			canvas.height - bubble.y - camera.y
+		);
+		ctx.quadraticCurveTo(
+			bubble.x - camera.x,
+			canvas.height - bubble.y + size3/2 - camera.y,
+			bubble.x + size3 - camera.x,
+			canvas.height - bubble.y - camera.y
+		);
+		ctx.quadraticCurveTo(
+			bubble.x - camera.x,
+			canvas.height - bubble.y - size3/2 - camera.y,
+			bubble.x - size3 - camera.x,
+			canvas.height - bubble.y - camera.y
+		);
+		ctx.strokeStyle = "rgba(255, 192, 0, " + (705 - bubble.frame)/100 + ")"; // lava surface + alpha
+		ctx.stroke();
+		ctx.closePath();
+		bubble.frame ++;
 	} else {
 		// draw base
 		var size1 = bubble.frame * bubble.size / 40;
@@ -125,7 +150,7 @@ function drawBubble(bubble) {
 		ctx.fill();
 		ctx.closePath();
 		// draw popping animation
-		var size2 = (bubble.frame - 600) * bubble.size;
+		var size2 = (bubble.frame - 600) * bubble.size * 2;
 		if(size2 < 0) {
 			size2 = 0;
 		}
@@ -149,6 +174,6 @@ function drawBubble(bubble) {
 		ctx.fillStyle = lavaMainColor;
 		ctx.fill();
 		ctx.closePath();
-		bubble.frame += 1;
+		bubble.frame ++;
 	}
 }

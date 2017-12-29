@@ -262,194 +262,196 @@ function drawDebrisBackground(camera) {
 					woodShadowColor
 				);
 				// detail on front face
-				// top triangle
-				ctx.beginPath();
-				ctx.moveTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0,
-						-0.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0,
-						-0.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.fillStyle = woodMainColor;
-				ctx.fill();
-				ctx.closePath();
-				// left triangle
-				ctx.beginPath();
-				ctx.moveTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.75 * debris[i].detailWidth,
-						0,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.75 * debris[i].detailWidth,
-						0,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].width + debris[i].detailWidth,
-						-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + debris[i].detailWidth,
-						-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].width + debris[i].detailWidth,
-						0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + debris[i].detailWidth,
-						0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.fillStyle = woodMainColor;
-				ctx.fill();
-				ctx.closePath();
-				// right triangle
-				ctx.beginPath();
-				ctx.moveTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.75 * debris[i].detailWidth,
-						0,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.75 * debris[i].detailWidth,
-						0,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].width - debris[i].detailWidth,
-						-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - debris[i].detailWidth,
-						-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].width - debris[i].detailWidth,
-						0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - debris[i].detailWidth,
-						0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.fillStyle = woodMainColor;
-				ctx.fill();
-				ctx.closePath();
-				// bottom triangle
-				ctx.beginPath();
-				ctx.moveTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0,
-						0.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0,
-						0.75 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.fillStyle = woodMainColor;
-				ctx.fill();
-				ctx.closePath();
+				if(debris[i].height > 3.5 * debris[i].detailWidth) {
+					// top triangle
+					ctx.beginPath();
+					ctx.moveTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0,
+							-0.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0,
+							-0.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.fillStyle = woodMainColor;
+					ctx.fill();
+					ctx.closePath();
+					// left triangle
+					ctx.beginPath();
+					ctx.moveTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.75 * debris[i].detailWidth,
+							0,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.75 * debris[i].detailWidth,
+							0,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].width + debris[i].detailWidth,
+							-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].width + debris[i].detailWidth,
+							-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].width + debris[i].detailWidth,
+							0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].width + debris[i].detailWidth,
+							0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.fillStyle = woodMainColor;
+					ctx.fill();
+					ctx.closePath();
+					// right triangle
+					ctx.beginPath();
+					ctx.moveTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.75 * debris[i].detailWidth,
+							0,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.75 * debris[i].detailWidth,
+							0,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].width - debris[i].detailWidth,
+							-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].width - debris[i].detailWidth,
+							-0.5 * debris[i].height + 1.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].width - debris[i].detailWidth,
+							0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].width - debris[i].detailWidth,
+							0.5 * debris[i].height - 1.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.fillStyle = woodMainColor;
+					ctx.fill();
+					ctx.closePath();
+					// bottom triangle
+					ctx.beginPath();
+					ctx.moveTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0,
+							0.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0,
+							0.75 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].width - 1.75 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].width + 1.75 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.fillStyle = woodMainColor;
+					ctx.fill();
+					ctx.closePath();
+				}
 				break;
 			case 3:
 				// inverted wood table
@@ -594,171 +596,173 @@ function drawDebrisBackground(camera) {
 					woodShadowColor
 				);
 				// detail on front face
-				// door 1
-				ctx.beginPath();
-				ctx.moveTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].width - 2 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 2 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].width - 2 * debris[i].detailWidth,
-						0.5 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 2 * debris[i].detailWidth,
-						0.5 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
-						0.5 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
-						0.5 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.fillStyle = woodMainColor;
-				ctx.fill();
-				ctx.closePath();
-				// door 2
-				ctx.beginPath();
-				ctx.moveTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].width - 2 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 2 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].width - 2 * debris[i].detailWidth,
-						-0.5 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - 2 * debris[i].detailWidth,
-						-0.5 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
-						-0.5 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
-						-0.5 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + 2 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.fillStyle = woodMainColor;
-				ctx.fill();
-				ctx.closePath();
-				// handles
-				ctx.beginPath();
-				ctx.arc(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
+				if(debris[i].height > 3 * debris[i].detailWidth) {
+					// door 1
+					ctx.beginPath();
+					ctx.moveTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].width - 2 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].width - 2 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].width - 2 * debris[i].detailWidth,
+							0.5 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].width - 2 * debris[i].detailWidth,
+							0.5 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+							0.5 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+							0.5 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.fillStyle = woodMainColor;
+					ctx.fill();
+					ctx.closePath();
+					// door 2
+					ctx.beginPath();
+					ctx.moveTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].width - 2 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].width - 2 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].width - 2 * debris[i].detailWidth,
+							-0.5 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].width - 2 * debris[i].detailWidth,
+							-0.5 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+							-0.5 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+							-0.5 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].width + 2 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.fillStyle = woodMainColor;
+					ctx.fill();
+					ctx.closePath();
+					// handles
+					ctx.beginPath();
+					ctx.arc(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0,
+							-1 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0,
+							-1 * debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						debris[i].detailWidth/4,
 						0,
-						-1 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+						Math.PI*2
+					);
+					ctx.fillStyle = woodHighlightColor;
+					ctx.fill();
+					ctx.closePath();
+					ctx.beginPath();
+					ctx.arc(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0,
+							debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0,
+							debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						debris[i].detailWidth/4,
 						0,
-						-1 * debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					debris[i].detailWidth/4,
-					0,
-					Math.PI*2
-				);
-				ctx.fillStyle = woodHighlightColor;
-				ctx.fill();
-				ctx.closePath();
-				ctx.beginPath();
-				ctx.arc(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0,
-						debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0,
-						debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					debris[i].detailWidth/4,
-					0,
-					Math.PI*2
-				);
-				ctx.fillStyle = woodHighlightColor;
-				ctx.fill();
-				ctx.closePath();
+						Math.PI*2
+					);
+					ctx.fillStyle = woodHighlightColor;
+					ctx.fill();
+					ctx.closePath();
+				}
 				break;
 			case 5:
 				// wood bookshelf
@@ -1065,171 +1069,173 @@ function drawDebrisBackground(camera) {
 					woodShadowColor
 				);
 				// detail on front face
-				// door 1
-				ctx.beginPath();
-				ctx.moveTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].width - debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						0.5 * debris[i].width - debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						0.5 * debris[i].width - debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.fillStyle = woodMainColor;
-				ctx.fill();
-				ctx.closePath();
-				// door 2
-				ctx.beginPath();
-				ctx.moveTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].width + debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].detailWidth,
-						0.5 * debris[i].height - debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.lineTo(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-0.5 * debris[i].width + debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-0.5 * debris[i].width + debris[i].detailWidth,
-						-0.5 * debris[i].height + debris[i].detailWidth,
-						debris[i].a
-					), -0.5 * debris[i].depth)
-				);
-				ctx.fillStyle = woodMainColor;
-				ctx.fill();
-				ctx.closePath();
-				// handles
-				ctx.beginPath();
-				ctx.arc(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						-1 * debris[i].detailWidth,
+				if(debris[i].height > 2 * debris[i].detailWidth) {
+					// door 1
+					ctx.beginPath();
+					ctx.moveTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].width - debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].width - debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							0.5 * debris[i].width - debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							0.5 * debris[i].width - debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.fillStyle = woodMainColor;
+					ctx.fill();
+					ctx.closePath();
+					// door 2
+					ctx.beginPath();
+					ctx.moveTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].width + debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].width + debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].detailWidth,
+							0.5 * debris[i].height - debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.lineTo(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-0.5 * debris[i].width + debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-0.5 * debris[i].width + debris[i].detailWidth,
+							-0.5 * debris[i].height + debris[i].detailWidth,
+							debris[i].a
+						), -0.5 * debris[i].depth)
+					);
+					ctx.fillStyle = woodMainColor;
+					ctx.fill();
+					ctx.closePath();
+					// handles
+					ctx.beginPath();
+					ctx.arc(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							-1 * debris[i].detailWidth,
+							0,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							-1 * debris[i].detailWidth,
+							0,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						debris[i].detailWidth/4,
 						0,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						-1 * debris[i].detailWidth,
+						Math.PI*2
+					);
+					ctx.fillStyle = woodHighlightColor;
+					ctx.fill();
+					ctx.closePath();
+					ctx.beginPath();
+					ctx.arc(
+						make3dX(calculateVertX(
+							debris[i].x - camera.x,
+							debris[i].detailWidth,
+							0,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						make3dY(calculateVertY(
+							debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+							debris[i].detailWidth,
+							0,
+							debris[i].a
+						), -0.5 * debris[i].depth),
+						debris[i].detailWidth/4,
 						0,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					debris[i].detailWidth/4,
-					0,
-					Math.PI*2
-				);
-				ctx.fillStyle = woodHighlightColor;
-				ctx.fill();
-				ctx.closePath();
-				ctx.beginPath();
-				ctx.arc(
-					make3dX(calculateVertX(
-						debris[i].x - camera.x,
-						debris[i].detailWidth,
-						0,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					make3dY(calculateVertY(
-						debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
-						debris[i].detailWidth,
-						0,
-						debris[i].a
-					), -0.5 * debris[i].depth),
-					debris[i].detailWidth/4,
-					0,
-					Math.PI*2
-				);
-				ctx.fillStyle = woodHighlightColor;
-				ctx.fill();
-				ctx.closePath();
+						Math.PI*2
+					);
+					ctx.fillStyle = woodHighlightColor;
+					ctx.fill();
+					ctx.closePath();
+				}
 				break;
 			case 8:
 				// fabric sofa
@@ -1329,6 +1335,7 @@ function drawDebrisBackground(camera) {
 					debris[i].a,
 					fabricShadowColor
 				);
+				// TODO - add cushion detail
 				break;
 			case 9:
 				// fabric chair
