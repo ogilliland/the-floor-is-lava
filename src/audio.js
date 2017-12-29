@@ -9,35 +9,35 @@ function drumKit() {
 	this.soundQueue = [0, 0, 0, 0, 0]; // tom1, tom2, tom3
 	// load sounds
 	this.kick = new Howl({
-		src: ['sfx/drum_kick.mp3'],
+		src: ['sfx/drum_kick.mp3', 'sfx/drum_kick.wav'],
 		volume: 1
 	});
 	this.hat = new Howl({
-		src: ['sfx/drum_hat.mp3'],
+		src: ['sfx/drum_hat.mp3', 'sfx/drum_hat.wav'],
 		volume: 0.15
 	});
 	this.snare = new Howl({
-		src: ['sfx/drum_snare.mp3'],
+		src: ['sfx/drum_snare.mp3', 'sfx/drum_snare.wav'],
 		volume: 0.5
 	});
 	this.tom1 = new Howl({
-		src: ['sfx/drum_tom1.mp3'],
+		src: ['sfx/drum_tom1.mp3', 'sfx/drum_tom1.wav'],
 		volume: 0.25
 	});
 	this.tom2 = new Howl({
-		src: ['sfx/drum_tom2.mp3'],
+		src: ['sfx/drum_tom2.mp3', 'sfx/drum_tom2.wav'],
 		volume: 0.25
 	});
 	this.tom3 = new Howl({
-		src: ['sfx/drum_tom3.mp3'],
+		src: ['sfx/drum_tom3.mp3', 'sfx/drum_tom3.wav'],
 		volume: 0.25
 	});
 	this.tap = new Howl({
-		src: ['sfx/drum_tap.mp3'],
+		src: ['sfx/drum_tap.mp3', 'sfx/drum_tap.wav'],
 		volume: 0.25
 	});
 	this.cymbal = new Howl({
-		src: ['sfx/drum_cymbal.mp3'],
+		src: ['sfx/drum_cymbal.mp3', 'sfx/drum_cymbal.wav'],
 		volume: 0.5
 	});
 }
