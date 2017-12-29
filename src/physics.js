@@ -7,11 +7,19 @@ function calculateVertY(oy, vx, vy, angle) {
 }
 
 function make3dX(vx, depth) {
-	return vx - depth * (2 * vx / canvas.width - 1);
+	if(force2d) {
+		return vx;
+	} else {
+		return vx - depth * (2 * vx / canvas.width - 1);
+	}
 }
 
 function make3dY(vy, depth) {
-	return vy - depth * (0.5 * vy / canvas.height);
+	if(force2d) {
+		return vy;
+	} else {
+		return vy - depth * (0.5 * vy / canvas.height);
+	}
 }
 
 function simulatePhysics() {

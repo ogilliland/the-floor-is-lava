@@ -1,13 +1,14 @@
 // world building
 var gravity = 0.5;
 var friction = 0.2;
-var meltRate = 0.2;
+var meltRate = 0.3;
 
 // the floor is lava
 var lavaBottomColor = "rgba(255, 128, 0, 0.875)";
 var lavaMainColor = "rgba(255, 128, 0, 1)";
 var lavaSurfaceColor = "rgba(255, 192, 0, 1)";
 var lavaBottomHeight = 125;
+var originalBottomHeight = 125;
 var lavaMainHeight = 200;
 var lavaSurfaceHeight = 3;
 
@@ -45,6 +46,11 @@ function drawBackground(camera) {
 }
 
 function drawForeground(camera) {
+	if(force2d) {
+		lavaBottomHeight = 140;
+	} else {
+		lavaBottomHeight = 125;
+	}
 	ctx.beginPath();
 	ctx.rect(
 		0,
@@ -72,9 +78,9 @@ var bubbles2 = new Array();
 
 function addBubble(size, frame) {
 	if(Math.random() > 0.25) {
-		bubbles2.push(new Bubble(Math.random() * (6 * canvas.width) + camera.x - 3 * canvas.width, Math.random() * 2 * lavaBottomHeight - lavaBottomHeight, size, frame));
+		bubbles2.push(new Bubble(Math.random() * (6 * canvas.width) + camera.x - 3 * canvas.width, Math.random() * 2 * originalBottomHeight - originalBottomHeight, size, frame));
 	} else {
-		bubbles1.push(new Bubble(Math.random() * (6 * canvas.width) + camera.x - 3 * canvas.width, Math.random() * (lavaMainHeight - lavaBottomHeight) + lavaBottomHeight - 10, size, frame));
+		bubbles1.push(new Bubble(Math.random() * (6 * canvas.width) + camera.x - 3 * canvas.width, Math.random() * (lavaMainHeight - originalBottomHeight) + originalBottomHeight - 10, size, frame));
 	}
 }
 

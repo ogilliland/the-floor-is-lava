@@ -58,12 +58,17 @@ function drawSplashScreen() {
 	ctx.fillStyle = titleColor;
 	var title = "THE FLOOR IS LAVA!";
 	var titleWidth = ctx.measureText(title).width;
-	ctx.fillText(title, (canvas.width/2) - (titleWidth/2), (canvas.height/2) - 25);
+	ctx.fillText(title, (canvas.width/2) - (titleWidth/2), (canvas.height/2) - 75);
 	ctx.font = "100 24px sans-serif";
+	var instructions1 = "ARROW KEYS or WASD to move";
+	var instructions2 = "SPACE or UP to jump";
+	var instruct1Width = ctx.measureText(instructions1).width;
+	ctx.fillText(instructions1, (canvas.width/2) - (instruct1Width/2), (canvas.height/2) + 22);
+	var instruct2Width = ctx.measureText(instructions2).width;
+	ctx.fillText(instructions2, (canvas.width/2) - (instruct2Width/2), (canvas.height/2) + 57);
 	var text = "Press ENTER to begin...";
 	var textWidth = ctx.measureText(text).width;
-	ctx.fillStyle = titleColor;
-	ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 100);
+	ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 150);
 
 }
 
@@ -86,15 +91,21 @@ function drawGameOver() {
 	} else {
 		var scoreText = score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
-	var title1 = "YOU SCORED";
-	var title2 =  scoreText + " POINTS";
-	var title1Width = ctx.measureText(title1).width;
-	ctx.fillText(title1, canvas.width/2 - title1Width/2, canvas.height/2 - 55);
-	var title2Width = ctx.measureText(title2).width;
-	ctx.fillText(title2, canvas.width/2 - title2Width/2, canvas.height/2 + 5);
+	if(personalBest == 0) {
+		var best2Text = "ZERO";
+	} else {
+		var best2Text = personalBest.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+	var title = "YOU GOT " + scoreText + " POINTS";
+	var titleWidth = ctx.measureText(title).width;
+	ctx.fillText(title, canvas.width/2 - titleWidth/2, canvas.height/2 - 75);
 	ctx.font = "100 24px sans-serif";
+	var best1Text = "Personal best:";
+	var best1Width = ctx.measureText(best1Text).width;
+	ctx.fillText(best1Text, (canvas.width/2) - (best1Width/2), (canvas.height/2) + 22);
+	var best2Width = ctx.measureText(best2Text).width;
+	ctx.fillText(best2Text, (canvas.width/2) - (best2Width/2), (canvas.height/2) + 57);
 	var text = "Press ENTER to try again...";
 	var textWidth = ctx.measureText(text).width;
-	ctx.fillStyle = titleColor;
-	ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 100);
+	ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 150);
 }

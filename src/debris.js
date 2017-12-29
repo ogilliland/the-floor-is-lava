@@ -82,7 +82,7 @@ function debrisSize(type) {
 		// wood chair
 		result = [
 			100,
-			100,
+			75,
 			75,
 			20
 		];
@@ -96,12 +96,24 @@ function debrisSize(type) {
 			20
 		];
 		break;
-	/* case 8:
-		// TODO - fabric sofa
+	case 8:
+		// fabric sofa
+		result = [
+			250 + 200 * Math.random(),
+			75,
+			62.5,
+			20
+		];
 		break;
 	case 9:
-		// TODO - fabric chair
-		break; */
+		// fabric chair
+		result = [
+			200,
+			75,
+			62.5,
+			20
+		];
+		break;
 	default:
 		// rock
 		result = [
@@ -184,6 +196,16 @@ function drawDebrisBackground(camera) {
 					woodShadowColor,
 					woodHighlightColor
 				);
+				drawSurface(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].a,
+					woodShadowColor
+				);
 				// back legs
 				drawRect(
 					debris[i].x - camera.x,
@@ -229,6 +251,16 @@ function drawDebrisBackground(camera) {
 					woodMainColor,
 					woodShadowColor,
 					woodHighlightColor
+				);
+				drawSurface(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].a,
+					woodShadowColor
 				);
 				// detail on front face
 				// top triangle
@@ -495,6 +527,16 @@ function drawDebrisBackground(camera) {
 					woodShadowColor,
 					woodHighlightColor
 				);
+				drawSurface(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].a,
+					woodShadowColor
+				);
 				break;
 			case 4:
 				// wood dresser
@@ -541,6 +583,16 @@ function drawDebrisBackground(camera) {
 					woodMainColor,
 					woodShadowColor,
 					woodHighlightColor
+				);
+				drawSurface(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].a,
+					woodShadowColor
 				);
 				// detail on front face
 				// door 1
@@ -874,6 +926,16 @@ function drawDebrisBackground(camera) {
 					woodShadowColor,
 					woodHighlightColor
 				);
+				drawSurface(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].a,
+					woodShadowColor
+				);
 				break;
 			case 6:
 				// wood chair
@@ -955,15 +1017,25 @@ function drawDebrisBackground(camera) {
 					debris[i].x - camera.x,
 					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
 					0,
-					-1 * debris[i].height/2 - debris[i].originalHeight/2,
+					-1 * debris[i].height/2 - 90/2,
 					debris[i].depth/2,
 					debris[i].width,
-					debris[i].originalHeight,
+					90,
 					debris[i].detailWidth,
 					debris[i].a,
 					woodMainColor,
 					woodShadowColor,
 					woodHighlightColor
+				);
+				drawSurface(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].a,
+					woodShadowColor
 				);
 				break;
 			case 7:
@@ -982,6 +1054,16 @@ function drawDebrisBackground(camera) {
 					woodMainColor,
 					woodShadowColor,
 					woodHighlightColor
+				);
+				drawSurface(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].a,
+					woodShadowColor
 				);
 				// detail on front face
 				// door 1
@@ -1150,12 +1232,204 @@ function drawDebrisBackground(camera) {
 				ctx.fill();
 				ctx.closePath();
 				break;
-			/* case 8:
-				// TODO - fabric sofa
+			case 8:
+				// fabric sofa
+				// main body
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].depth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				// left arm
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width + 0.5 * debris[i].detailWidth,
+					0,
+					-0.5 * debris[i].depth,
+					debris[i].detailWidth,
+					debris[i].height,
+					debris[i].detailWidth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				drawCircle(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width + 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
+					0,
+					2 * debris[i].detailWidth,
+					debris[i].depth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				// right arm
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 0.5 * debris[i].detailWidth,
+					0,
+					-0.5 * debris[i].depth,
+					debris[i].detailWidth,
+					debris[i].height,
+					debris[i].detailWidth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				drawCircle(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
+					0,
+					2 * debris[i].detailWidth,
+					debris[i].depth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				// back
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					-0.5 * debris[i].height - 50,
+					0.5 * debris[i].depth - 0.5 * debris[i].detailWidth,
+					debris[i].width - 1.5 *  debris[i].detailWidth,
+					100,
+					debris[i].detailWidth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				drawSurface(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].a,
+					fabricShadowColor
+				);
 				break;
 			case 9:
-				// TODO - fabric chair
-				break; */
+				// fabric chair
+				// main body
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].depth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				// left arm
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width + 0.5 * debris[i].detailWidth,
+					0,
+					-0.5 * debris[i].depth,
+					debris[i].detailWidth,
+					debris[i].height,
+					debris[i].detailWidth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				drawCircle(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width + 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
+					0,
+					2 * debris[i].detailWidth,
+					debris[i].depth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				// right arm
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 0.5 * debris[i].detailWidth,
+					0,
+					-0.5 * debris[i].depth,
+					debris[i].detailWidth,
+					debris[i].height,
+					debris[i].detailWidth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				drawCircle(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
+					0,
+					2 * debris[i].detailWidth,
+					debris[i].depth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				// back
+				drawRect(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					-0.5 * debris[i].height - 50,
+					0.5 * debris[i].depth - 0.5 * debris[i].detailWidth,
+					debris[i].width - 1.5 *  debris[i].detailWidth,
+					100,
+					debris[i].detailWidth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				drawSurface(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].a,
+					fabricShadowColor
+				);
+				break;
 			default:
 				// rock
 				drawRect(
@@ -1171,6 +1445,16 @@ function drawDebrisBackground(camera) {
 					rockMainColor,
 					rockShadowColor,
 					rockHighlightColor
+				);
+				drawSurface(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0,
+					0,
+					debris[i].width,
+					debris[i].height,
+					debris[i].a,
+					rockShadowColor
 				);
 			}
 		}
@@ -1245,6 +1529,63 @@ function drawDebrisForeground(camera) {
 					woodHighlightColor
 				);
 				break;
+			case 8:
+				// fabric sofa
+				drawCircle(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
+					-0.25 * debris[i].depth,
+					2 * debris[i].detailWidth,
+					0.5 * debris[i].depth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				drawCircle(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width + 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
+					-0.25 * debris[i].depth,
+					2 * debris[i].detailWidth,
+					0.5 * debris[i].depth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				break;
+			case 9:
+				// fabric chair
+				drawCircle(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					0.5 * debris[i].width - 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
+					-0.25 * debris[i].depth,
+					2 * debris[i].detailWidth,
+					0.5 * debris[i].depth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
+				drawCircle(
+					debris[i].x - camera.x,
+					debris[i].y - camera.y - lavaMainHeight - lavaSurfaceHeight + canvas.height,
+					-0.5 * debris[i].width + 0.25 * debris[i].detailWidth,
+					-0.5 * debris[i].height - 0.5 * debris[i].detailWidth,
+					-0.25 * debris[i].depth,
+					2 * debris[i].detailWidth,
+					0.5 * debris[i].depth,
+					debris[i].a,
+					fabricMainColor,
+					fabricShadowColor,
+					fabricHighlightColor
+				);
 			default:
 				// do nothing
 			}
@@ -1252,258 +1593,637 @@ function drawDebrisForeground(camera) {
 	}
 }
 
+function drawSurface(ox, oy, x, y, width, height, angle, color) {
+	if(force2d) {
+		// this is only necessary in 2d mode
+		ctx.lineWidth = 5;
+		ctx.beginPath();
+		ctx.moveTo(
+			calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			),
+			calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			),
+		);
+		ctx.lineTo(
+			calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			),
+			calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			),
+		);
+		ctx.strokeStyle = color;
+		ctx.stroke();
+		ctx.closePath();
+	}
+}
+
 function drawRect(ox, oy, x, y, z, width, height, depth, angle, c1, c2, c3) {
-	ctx.lineWidth = 1;
-	// right face
-	ctx.beginPath();
-	ctx.moveTo(
-		make3dX(calculateVertX(
-			ox,
-			x + 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z - 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x + 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z - 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x + 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x + 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x + 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z + 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x + 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z + 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x + 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z + 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x + 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z + 0.5 * depth)
-	);
-	ctx.strokeStyle = c1;
-	ctx.stroke();
-	ctx.fillStyle = c1;
-	ctx.fill();
-	ctx.closePath();
-	// left face
-	ctx.beginPath();
-	ctx.moveTo(
-		make3dX(calculateVertX(
-			ox,
-			x - 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z - 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x - 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z - 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x - 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x - 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x - 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z + 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x - 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z + 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x - 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z + 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x - 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z + 0.5 * depth)
-	);
-	ctx.strokeStyle = c1;
-	ctx.stroke();
-	ctx.fillStyle = c1;
-	ctx.fill();
-	ctx.closePath();
-	// top face
-	ctx.beginPath();
-	ctx.moveTo(
-		make3dX(calculateVertX(
-			ox,
-			x + 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x + 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x + 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z + 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x + 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z + 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x - 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z + 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x - 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z + 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x - 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x - 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth)
-	);
-	ctx.strokeStyle = c2;
-	ctx.stroke();
-	ctx.fillStyle = c2;
-	ctx.fill();
-	ctx.closePath();
-	// front face
-	ctx.beginPath();
-	ctx.moveTo(
-		make3dX(calculateVertX(
-			ox,
-			x + 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z - 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x + 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z - 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x + 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x + 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x - 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x - 0.5 * width,
-			y - 0.5 * height,
-			angle
-		), z - 0.5 * depth)
-	);
-	ctx.lineTo(
-		make3dX(calculateVertX(
-			ox,
-			x - 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z - 0.5 * depth),
-		make3dY(calculateVertY(
-			oy,
-			x - 0.5 * width,
-			y + 0.5 * height,
-			angle
-		), z - 0.5 * depth)
-	);
-	ctx.strokeStyle = c3;
-	ctx.stroke();
-	ctx.fillStyle = c3;
-	ctx.fill();
-	ctx.closePath();
+	if(force2d) {
+		// draw 2d rectangle
+		ctx.lineWidth = 5;
+		// front face
+		ctx.beginPath();
+		ctx.moveTo(
+			calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y + 0.5 * height,
+				angle
+			),
+			calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y + 0.5 * height,
+				angle
+			)
+		);
+		ctx.lineTo(
+			calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			),
+			calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			),
+		);
+		ctx.lineTo(
+			calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			),
+			calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			),
+		);
+		ctx.lineTo(
+			calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y + 0.5 * height,
+				angle
+			),
+			calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y + 0.5 * height,
+				angle
+			),
+		);
+		ctx.strokeStyle = c1;
+		ctx.stroke();
+		ctx.fillStyle = c3;
+		ctx.fill();
+		ctx.closePath();
+	} else {
+		// draw 3d rectangle
+		ctx.lineWidth = 1;
+		// right face
+		ctx.beginPath();
+		ctx.moveTo(
+			make3dX(calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.strokeStyle = c1;
+		ctx.stroke();
+		ctx.fillStyle = c1;
+		ctx.fill();
+		ctx.closePath();
+		// left face
+		ctx.beginPath();
+		ctx.moveTo(
+			make3dX(calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.strokeStyle = c1;
+		ctx.stroke();
+		ctx.fillStyle = c1;
+		ctx.fill();
+		ctx.closePath();
+		// top face
+		ctx.beginPath();
+		ctx.moveTo(
+			make3dX(calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.strokeStyle = c2;
+		ctx.stroke();
+		ctx.fillStyle = c2;
+		ctx.fill();
+		ctx.closePath();
+		// front face
+		ctx.beginPath();
+		ctx.moveTo(
+			make3dX(calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y - 0.5 * height,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - 0.5 * width,
+				y + 0.5 * height,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.strokeStyle = c3;
+		ctx.stroke();
+		ctx.fillStyle = c3;
+		ctx.fill();
+		ctx.closePath();
+	}
+}
+
+function drawCircle(ox, oy, x, y, z, diameter, depth, angle, c1, c2, c3) {
+	if(force2d) {
+		// draw 2d circle
+		ctx.lineWidth = 5;
+		ctx.beginPath();
+		ctx.arc(
+			calculateVertX(
+				ox,
+				x,
+				y,
+				angle
+			),
+			calculateVertY(
+				oy,
+				x,
+				y,
+				angle
+			),
+			diameter/2,
+			0,
+			Math.PI*2
+		);
+		ctx.strokeStyle = c1;
+		ctx.stroke();
+		ctx.fillStyle = c3;
+		ctx.fill();
+		ctx.closePath();
+	} else {
+		// draw 3d circle
+		ctx.lineWidth = 1;
+		// back face
+		ctx.beginPath();
+		ctx.arc(
+			make3dX(calculateVertX(
+				ox,
+				x,
+				y,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x,
+				y,
+				angle
+			), z + 0.5 * depth),
+			diameter/2,
+			0,
+			Math.PI*2
+		);
+		ctx.strokeStyle = c2;
+		ctx.stroke();
+		ctx.fillStyle = c2;
+		ctx.fill();
+		ctx.closePath();
+		// connection
+		// top face
+		ctx.beginPath();
+		ctx.moveTo(
+			make3dX(calculateVertX(
+				ox,
+				x + diameter/3,
+				y - diameter/3,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + diameter/3,
+				y - diameter/3,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x + diameter/3,
+				y - diameter/3,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + diameter/3,
+				y - diameter/3,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - diameter/3,
+				y - diameter/3,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - diameter/3,
+				y - diameter/3,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - diameter/3,
+				y - diameter/3,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - diameter/3,
+				y - diameter/3,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.strokeStyle = c2;
+		ctx.stroke();
+		ctx.fillStyle = c2;
+		ctx.fill();
+		ctx.closePath();
+		// bottom face
+		ctx.beginPath();
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x + diameter/3,
+				y + diameter/3,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + diameter/3,
+				y + diameter/3,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x + diameter/3,
+				y + diameter/3,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x + diameter/3,
+				y + diameter/3,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - diameter/3,
+				y + diameter/3,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - diameter/3,
+				y + diameter/3,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x - diameter/3,
+				y + diameter/3,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x - diameter/3,
+				y + diameter/3,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.strokeStyle = c2;
+		ctx.stroke();
+		ctx.fillStyle = c2;
+		ctx.fill();
+		ctx.closePath();
+		// infill
+		ctx.beginPath();
+		ctx.moveTo(
+			make3dX(calculateVertX(
+				ox,
+				x,
+				y - diameter/2,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x,
+				y - diameter/2,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x,
+				y - diameter/2,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x,
+				y - diameter/2,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x,
+				y + diameter/2,
+				angle
+			), z + 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x,
+				y + diameter/2,
+				angle
+			), z + 0.5 * depth)
+		);
+		ctx.lineTo(
+			make3dX(calculateVertX(
+				ox,
+				x,
+				y + diameter/2,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x,
+				y + diameter/2,
+				angle
+			), z - 0.5 * depth)
+		);
+		ctx.strokeStyle = c2;
+		ctx.stroke();
+		ctx.fillStyle = c2;
+		ctx.fill();
+		ctx.closePath();
+		// front face
+		ctx.beginPath();
+		ctx.arc(
+			make3dX(calculateVertX(
+				ox,
+				x,
+				y,
+				angle
+			), z - 0.5 * depth),
+			make3dY(calculateVertY(
+				oy,
+				x,
+				y,
+				angle
+			), z - 0.5 * depth),
+			diameter/2,
+			0,
+			Math.PI*2
+		);
+		ctx.strokeStyle = c2;
+		ctx.stroke();
+		ctx.fillStyle = c3;
+		ctx.fill();
+		ctx.closePath();
+	}
 }

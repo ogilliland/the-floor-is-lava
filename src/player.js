@@ -124,6 +124,18 @@ function drawPlayer(camera, player) {
 			py
 		);
 		ctx.stroke();
+		ctx.closePath();
+		ctx.beginPath();
+		ctx.arc(
+			px + 5 * player.height/48 * player.direction * Math.abs(stride),
+			py,
+			player.weight/player.height,
+			0,
+			Math.PI*2
+		);
+		ctx.fillStyle = "#000000";
+		ctx.fill();
+		ctx.closePath();
 		// leg 2
 		ctx.beginPath();
 		ctx.moveTo(
@@ -137,6 +149,18 @@ function drawPlayer(camera, player) {
 			py
 		);
 		ctx.stroke();
+		ctx.closePath();
+		ctx.beginPath();
+		ctx.arc(
+			px - 5 * player.height/48 * player.direction * Math.abs(stride),
+			py,
+			player.weight/player.height,
+			0,
+			Math.PI*2
+		);
+		ctx.fillStyle = "#000000";
+		ctx.fill();
+		ctx.closePath();
 		// body
 		ctx.beginPath();
 		ctx.moveTo(
@@ -150,6 +174,7 @@ function drawPlayer(camera, player) {
 			py - player.height/3
 		);
 		ctx.stroke();
+		ctx.closePath();
 		// arm 1
 		ctx.beginPath();
 		ctx.moveTo(
@@ -163,6 +188,18 @@ function drawPlayer(camera, player) {
 			py - player.height/3
 		);
 		ctx.stroke();
+		ctx.closePath();
+		ctx.beginPath();
+		ctx.arc(
+			px + 3 * player.height/24 * player.direction * Math.abs(stride),
+			py - player.height/3,
+			player.weight/player.height,
+			0,
+			Math.PI*2
+		);
+		ctx.fillStyle = "#000000";
+		ctx.fill();
+		ctx.closePath();
 		// arm 2
 		ctx.beginPath();
 		ctx.moveTo(
@@ -176,6 +213,18 @@ function drawPlayer(camera, player) {
 			py - player.height/3
 		);
 		ctx.stroke();
+		ctx.closePath();
+		ctx.beginPath();
+		ctx.arc(
+			px - player.height/12 * player.direction * Math.abs(stride),
+			py - player.height/3,
+			player.weight/player.height,
+			0,
+			Math.PI*2
+		);
+		ctx.fillStyle = "#000000";
+		ctx.fill();
+		ctx.closePath();
 		// head
 		ctx.beginPath();
 		ctx.arc(px, py - 9 * player.height/12, player.height/12, 0, Math.PI*2);
