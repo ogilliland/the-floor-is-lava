@@ -27,9 +27,31 @@
 	var canvas = document.getElementById("gameCanvas");
 	var ctx = canvas.getContext("2d");
 
+	function setScore(score) {
+		var d = new Date();
+	    d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000)); // expire 1 year from now
+	    var expires = "expires=" + d.toUTCString();
+	    document.cookie = "score=" + score + ";" + expires + ";path=/";
+	}
+
+	function getScore() {
+		var name = "score=";
+	    var ca = document.cookie.split(';');
+	    for(var i = 0; i < ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0) == ' ') {
+	            c = c.substring(1);
+	        }
+	        if (c.indexOf(name) == 0) {
+	            return parseInt(c.substring(name.length, c.length));
+	        }
+	    }
+	    return 0;
+	}
+
 	// setup
 	var score = 0;
-	var personalBest = 0;
+	var personalBest = getScore();
 	var furthest = 0;
 	var multiplier = 1;
 	var maxDistance = 0;
@@ -61,6 +83,7 @@
 		clearBubbles();
 		seedBubbles(100);
 		resetDrums();
+		resetController();
 		maxDistance = 0;
 	}
     
@@ -69,33 +92,38 @@
 	function draw() {
 		updateCanvas();
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		if(newGame) {
-			drawSplashScreen();
-			if(player.control.return > 0) {
-				newGame = false;
-				init();
-			}
+		if(!document.hasFocus()) {
+			drawFocusReminder();
 		} else {
-			// update positions and values
-			if(player.isAlive) {
-				createDebris();
-				calculateVisibleDebris(camera);
-				simulatePhysics();
-				camera.follow(player);
-				// render objects
-				drawBackground(camera); // lava
-				drawDebrisBackground(camera);
-				drawScore();
-				drawPlayer(camera, player);
-				drawDebrisForeground(camera);
-				drawForeground(camera); // lava
-			} else {
-				if(score > personalBest) {
-					personalBest = score;
-				}
-				drawGameOver();
+			if(newGame) {
+				drawSplashScreen();
 				if(player.control.return > 0) {
+					newGame = false;
 					init();
+				}
+			} else {
+				// update positions and values
+				if(player.isAlive) {
+					createDebris();
+					calculateVisibleDebris(camera);
+					simulatePhysics();
+					camera.follow(player);
+					// render objects
+					drawBackground(camera); // lava
+					drawDebrisBackground(camera);
+					drawScore();
+					drawPlayer(camera, player);
+					drawDebrisForeground(camera);
+					drawForeground(camera); // lava
+				} else {
+					if(score > personalBest) {
+						personalBest = score;
+						setScore(score);
+					}
+					drawGameOver();
+					if(player.control.return > 0) {
+						init();
+					}
 				}
 			}
 		}

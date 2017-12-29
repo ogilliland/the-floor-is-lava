@@ -69,7 +69,25 @@ function drawSplashScreen() {
 	var text = "Press ENTER to begin...";
 	var textWidth = ctx.measureText(text).width;
 	ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2) + 150);
+}
 
+function drawFocusReminder() {
+	ctx.beginPath();
+	ctx.rect(
+		0,
+		0,
+		canvas.width,
+		canvas.height
+	);
+	ctx.fillStyle = "rgba(0, 0, 0, 1)";
+	ctx.fill();
+	ctx.closePath();
+	// text
+	ctx.font = "100 24px sans-serif";
+	ctx.fillStyle = titleColor;
+	var text = "Click to focus window...";
+	var textWidth = ctx.measureText(text).width;
+	ctx.fillText(text, (canvas.width/2) - (textWidth/2), (canvas.height/2));
 }
 
 function drawGameOver() {

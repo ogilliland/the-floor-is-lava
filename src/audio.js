@@ -72,7 +72,7 @@ function resetNotes() {
 }
 
 function playDrums() {
-	if(!mute) {
+	if(!mute && document.hasFocus()) {
 		if(!newGame) {
 			if(player.isAlive) {
 				playhead += (1 + 0.25 * furthest/20) * 1000 * noteLength;

@@ -44,6 +44,13 @@ function Camera(width, height) {
 	}
 }
 
+function resetController() {
+	player.control.left = 0;
+	player.control.right = 0;
+	player.control.jump = 0;
+	// player.control.return = 0;
+}
+
 window.onkeyup = function(e) {
 	var unicode = e.keyCode ? e.keyCode : e.charCode;
 	if(unicode == 37 || unicode == 65) {
