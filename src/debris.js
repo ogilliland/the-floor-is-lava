@@ -7,25 +7,25 @@ var woodHighlightColor = "rgba(140, 70, 0, 1)";
 var fabricMainColor = "rgba(100, 25, 175, 1)";
 var fabricShadowColor = "rgba(75, 25, 150, 1)";
 var fabricHighlightColor = "rgba(125, 50, 200, 1)";
-var lastDebris = 0;
+var lastDebris = -1;
 var force2d = false;
 
 function createDebris() {
 	while(maxDistance - player.x < canvas.width/2) {
-		maxDistance += extraDistance;
-		var debrisType = Math.round(Math.random() * 9);
+		var debrisType = Math.round(Math.random() * 10);
 		if(debrisType == lastDebris) {
 			debrisType = debrisType - 1;
 		}
 		if(debrisType < 0) {
 			debrisType = 0;
 		}
-		addDebris(camera.width/2 + maxDistance, debrisType);
+		var size = debrisSize(debrisType);
+		if(maxDistance == 0) {
+			maxDistance += (-0.5) * size[0];
+		}
+		addDebris(camera.width/2 + maxDistance + 0.5 * size[0], debrisType, size);
 		lastDebris = debrisType;
-		extraDistance = camera.width/2 * (
-			1.5 * (multiplier/4 + 0.75) +
-			0.75 * (3 * multiplier/4 + 0.25) * Math.random()
-		);
+		maxDistance += size[0] + multiplier * (0.75 + 0.25 * Math.random()) * camera.width/2;
 	}
 }
 
@@ -127,11 +127,10 @@ function debrisSize(type) {
 }
 
 // used to define debris objects
-function Debris(x, type) {
+function Debris(x, type, size) {
 	this.type = type;
 	this.a = 0; // angle relative to horizontal
 	this.da = 0; // angular velocity
-	var size = debrisSize(type);
 	this.width = size[0];
 	this.height = size[1];
 	this.depth = size[2];
